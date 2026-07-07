@@ -33,8 +33,8 @@
   "suggestions": [],
   "would_do_differently": [],
   "links": [
-    {"label": "GitHub (open source)", "url": "https://github.com/juniorbrito0/cool-dock"},
-    {"label": "Download DMG (notarized)", "url": "https://github.com/juniorbrito0/cool-dock/releases/latest/download/Dock-Plus.dmg"},
+    {"label": "GitHub (open source)", "url": "https://github.com/juniorbrito0/dock-plus"},
+    {"label": "Download DMG (notarized)", "url": "https://github.com/juniorbrito0/dock-plus/releases/latest/download/Dock-Plus.dmg"},
     {"label": "Website", "url": "https://brito.ai/apps/dock-plus/"}
   ],
   "screenshots": [],

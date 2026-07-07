@@ -4,11 +4,9 @@ A floating **second Dock of live widgets** for macOS — it sits beside your sys
 
 Native SwiftUI. On-device and data-light. No account, no analytics.
 
-![Dock+](docs/shots/dockplus-dark.png)
-
 ## Download
 
-**[⬇︎ Download Dock+ for macOS](https://github.com/juniorbrito0/cool-dock/releases/latest/download/Dock-Plus.dmg)** — signed & notarized `.dmg`.
+**[⬇︎ Download Dock+ for macOS](https://github.com/juniorbrito0/dock-plus/releases/latest/download/Dock-Plus.dmg)** — signed & notarized `.dmg`.
 
 Open the disk image and drag **Dock+.app** into your `/Applications` folder. Requires **macOS 14 (Sonoma) or later** (Apple silicon & Intel).
 
@@ -61,7 +59,7 @@ xcodebuild -project CoolDock.xcodeproj -scheme CoolDock -configuration Release b
 
 - **Stack:** SwiftUI, Swift 6 (strict concurrency), AppKit, EventKit, IOKit, CoreLocation, ServiceManagement. Deployment target macOS 14.
 - **Architecture:** `@MainActor @Observable` service singletons poll live data; a borderless non-activating `NSPanel` floats the glass bar above the system Dock; each widget conforms to `DockWidgetView` and is registered in `WidgetRegistry`. Adding a widget = a new `WidgetKind` case + a view + a registry line.
-- See [`CLAUDE.md`](CLAUDE.md) for the full project conventions and [`docs/WORKLOG.md`](docs/WORKLOG.md) for the build history.
+- See [`docs/WORKLOG.md`](docs/WORKLOG.md) for the build history.
 
 ## License
 

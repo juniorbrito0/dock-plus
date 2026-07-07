@@ -24,5 +24,9 @@ CLAUDE.local.md
 # macOS
 .DS_Store
 
-# Temp verification screenshots (may contain personal screen content)
-docs/shots/verify-*
+# Screenshots / local proof images (kept local, not published)
+docs/shots/
+
+# AI tooling config (local only, not part of the open-source build)
+CLAUDE.md
+.claude/

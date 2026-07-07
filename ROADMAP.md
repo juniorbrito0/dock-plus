@@ -1,4 +1,4 @@
-# Cool Dock — Roadmap
+# Dock+ — Roadmap
 
 ## ✅ v0.2 (shipped, this session) — 14 widgets + interactivity
 - Widgets: Clock, Weather, **Music** (now-playing + controls + playlist popover), Calendar (**urgency color-coding**), **Email** (last 3 inbox), System (CPU/RAM), Battery, App launcher, **Folders** (QuickLook previews), **Bookmarks** (drop links), **Emoji** (top-5 + paste + picker), **Ask Claude** (deep link), **1Password** (search + copy), Quick actions.
