@@ -2,9 +2,9 @@
   "name": "Cool Dock",
   "type": "app",
   "goal": "A native macOS app (shipping as Dock+) that adds a floating second Dock of live widgets beside the system Dock.",
-  "progress": 60,
+  "progress": 75,
   "status": "active",
-  "updated_at": "2026-07-07T14:20:00Z",
+  "updated_at": "2026-07-07T14:45:00Z",
   "done": [
     "Built a floating glass NSPanel second-Dock above the system Dock, all-Spaces and edge-selectable",
     "Shipped v0.2 with 14 widgets (Clock, Weather, Music, Calendar, Email, System, Battery, App launcher, Folders, Bookmarks, Emoji, Ask Claude, 1Password, Quick actions)",
@@ -18,7 +18,11 @@
     "Added launch-at-login via SMAppService (auto-enables first run, self-heals the registered path to /Applications, Settings toggle); verified enabled via sfltool dumpbtm",
     "New Dia Tabs widget: reads the Dia browser's open tabs over AppleScript and jumps to one on click (verified live reading 56 tabs); confirmed Warp exposes no scripting API so its tabs can't be read",
     "Polish round: gave each widget tile its own frosted VisualEffectView backing so tiles read as solid cards against the 60%-transparent bar frame (fill wash 0.16/0.24), fixed the clock widget wrapping the AM/PM onto a second line, folders double-click-to-open-in-Finder + taller contents popover, tightened the gap to the system Dock, and a Reminders list picker (Today/All/specific list, default Today)",
-    "Initialized git and pushed the project to a private GitHub repo (juniorbrito0) as the first commit"
+    "Initialized git and pushed the project to a private GitHub repo (juniorbrito0) as the first commit",
+    "Ran a 14-agent review workflow (subsystem finders + adversarial verify); fixed all 9 confirmed medium bugs (osascript watchdog timeout, off-main EventKit/FS work, resilient widget persistence, safe log writes, TCC-hang activation-policy restore) plus cleanups (coalesced refreshes, shared tile chrome, once-a-minute clock, brand signature)",
+    "Open-sourced the project: added README + MIT LICENSE, made the GitHub repo public, cut Release v0.1.0",
+    "Packaged a Developer ID-signed, Apple-notarized + stapled Dock-Plus.dmg (Gatekeeper: Notarized Developer ID) and attached it to the GitHub release (stable /releases/latest/download link)",
+    "Took the Dock+ site live: removed the 'in the works' gate from brito.ai/apps/dock-plus, wired the DMG download + GitHub links, updated docs to 15 widgets incl. Dia Tabs + launch-at-login, deployed to Cloudflare Pages and verified (daylura unaffected)"
   ],
   "in_progress": [
     "Widget breadth toward Cooldock parity (~40 target)",
@@ -28,7 +32,11 @@
   "questions": [],
   "suggestions": [],
   "would_do_differently": [],
-  "links": [],
+  "links": [
+    {"label": "GitHub (open source)", "url": "https://github.com/juniorbrito0/cool-dock"},
+    {"label": "Download DMG (notarized)", "url": "https://github.com/juniorbrito0/cool-dock/releases/latest/download/Dock-Plus.dmg"},
+    {"label": "Website", "url": "https://brito.ai/apps/dock-plus/"}
+  ],
   "screenshots": [],
   "tech": ["Swift 6", "SwiftUI", "AppKit", "EventKit", "ServiceManagement", "AppleScript", "XcodeGen", "macOS 14"],
   "sections": {
