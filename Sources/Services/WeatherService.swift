@@ -30,6 +30,8 @@ final class WeatherService: NSObject, CLLocationManagerDelegate {
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         Task { @MainActor in
             let status = self.manager.authorizationStatus
+            // On macOS a granted location request reports as .authorizedAlways (there is no
+            // .authorizedWhenInUse case on macOS).
             authorized = status == .authorizedAlways
             if authorized { self.manager.startUpdatingLocation() }
         }

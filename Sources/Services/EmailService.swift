@@ -50,7 +50,7 @@ final class EmailService {
         }
         isMailRunning = true
 
-        let output = await Self.run(Self.inboxScript)
+        let output = await AppleScriptRunner.run(Self.inboxScript)
         messages = output
             .split(separator: "\n", omittingEmptySubsequences: true)
             .compactMap { line in
@@ -63,21 +63,21 @@ final class EmailService {
     func archive(_ item: EmailItem) async {
         guard isMailRunning else { return }
         messages.removeAll { $0.id == item.id }
-        _ = await Self.run(Self.archiveScript(id: item.id))
+        _ = await AppleScriptRunner.run(Self.archiveScript(id: item.id))
         await refresh()
     }
 
     func delete(_ item: EmailItem) async {
         guard isMailRunning else { return }
         messages.removeAll { $0.id == item.id }
-        _ = await Self.run(Self.deleteScript(id: item.id))
+        _ = await AppleScriptRunner.run(Self.deleteScript(id: item.id))
         await refresh()
     }
 
     func snooze(_ item: EmailItem) async {
         guard isMailRunning else { return }
         messages.removeAll { $0.id == item.id }
-        _ = await Self.run(Self.snoozeScript(id: item.id))
+        _ = await AppleScriptRunner.run(Self.snoozeScript(id: item.id))
         await refresh()
     }
 
@@ -163,26 +163,5 @@ final class EmailService {
             end try
         end tell
         """
-    }
-
-    private nonisolated static func run(_ script: String) async -> String {
-        await withCheckedContinuation { continuation in
-            DispatchQueue.global(qos: .utility).async {
-                let process = Process()
-                process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-                process.arguments = ["-e", script]
-                let pipe = Pipe()
-                process.standardOutput = pipe
-                process.standardError = FileHandle.nullDevice
-                do {
-                    try process.run()
-                    let data = pipe.fileHandleForReading.readDataToEndOfFile()
-                    process.waitUntilExit()
-                    continuation.resume(returning: String(data: data, encoding: .utf8) ?? "")
-                } catch {
-                    continuation.resume(returning: "")
-                }
-            }
-        }
     }
 }

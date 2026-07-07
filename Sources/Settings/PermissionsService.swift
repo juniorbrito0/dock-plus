@@ -95,6 +95,9 @@ final class PermissionsService: NSObject, CLLocationManagerDelegate {
             try? await Task.sleep(for: .seconds(10))
             if !Task.isCancelled {
                 DiagLog.log("requestCalendar STILL PENDING after 10s — the prompt never resolved (hang)")
+                // The request can hang forever; restore .accessory so the app doesn't get stranded
+                // as a Dock-icon regular app.
+                NSApp.setActivationPolicy(.accessory)
             }
         }
         Task {
@@ -120,6 +123,13 @@ final class PermissionsService: NSObject, CLLocationManagerDelegate {
         NSApp.activate(ignoringOtherApps: true)
         DiagLog.log("requestReminders BEGIN status=\(EKEventStore.authorizationStatus(for: .reminder).rawValue) "
             + "policy=\(NSApp.activationPolicy().rawValue) active=\(NSApp.isActive)")
+        let timeoutTask = Task {
+            try? await Task.sleep(for: .seconds(10))
+            if !Task.isCancelled {
+                DiagLog.log("requestReminders STILL PENDING after 10s — the prompt never resolved (hang)")
+                NSApp.setActivationPolicy(.accessory)
+            }
+        }
         Task {
             try? await Task.sleep(for: .milliseconds(500))
             do {
@@ -129,6 +139,7 @@ final class PermissionsService: NSObject, CLLocationManagerDelegate {
             } catch {
                 DiagLog.log("requestReminders THREW \(error.localizedDescription)")
             }
+            timeoutTask.cancel()
             NSApp.setActivationPolicy(.accessory)
             refresh()
             await RemindersService.shared.refresh()
@@ -138,8 +149,9 @@ final class PermissionsService: NSObject, CLLocationManagerDelegate {
     func requestLocation() {
         DiagLog.log("requestLocation BEGIN status=\(locationManager.authorizationStatus.rawValue) "
             + "policy=\(NSApp.activationPolicy().rawValue)")
+        // WeatherService is already started at launch and re-fetches when authorization changes,
+        // so there's nothing to kick off here — just request the grant.
         locationManager.requestWhenInUseAuthorization()
-        WeatherService.shared.start()
     }
 
     func promptAccessibility() {

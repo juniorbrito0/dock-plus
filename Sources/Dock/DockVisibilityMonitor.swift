@@ -13,6 +13,8 @@ final class DockVisibilityMonitor {
     var onChange: (() -> Void)?
 
     private var task: Task<Void, Never>?
+    // Cached once — the poll runs ~11×/second, so re-creating this suite per tick was pure churn.
+    private let dockDefaults = UserDefaults(suiteName: "com.apple.dock")
 
     private init() {}
 
@@ -39,7 +41,7 @@ final class DockVisibilityMonitor {
     }
 
     private func targetInset() -> CGFloat {
-        let dock = UserDefaults(suiteName: "com.apple.dock")
+        let dock = dockDefaults
         let autohide = dock?.bool(forKey: "autohide") ?? false
         let orientation = dock?.string(forKey: "orientation") ?? "bottom"
 

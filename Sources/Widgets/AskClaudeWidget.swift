@@ -5,9 +5,7 @@ struct AskClaudeWidget: DockWidgetView {
     @FocusState private var focused: Bool
     init() {}
 
-    private var width: CGFloat {
-        Theme.Size.tile * WidgetKind.askClaude.widthUnits + Theme.Spacing.md * (WidgetKind.askClaude.widthUnits - 1)
-    }
+    private var width: CGFloat { Theme.Size.tileWidth(units: WidgetKind.askClaude.widthUnits) }
 
     private var trimmed: String {
         query.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -38,14 +36,7 @@ struct AskClaudeWidget: DockWidgetView {
         }
         .padding(.horizontal, Theme.Spacing.md)
         .frame(width: width, height: Theme.Size.tile)
-        .background(
-            RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                .fill(Theme.Color.tileFill)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                .strokeBorder(Theme.Color.tileStroke, lineWidth: 1)
-        )
+        .tileChrome()
     }
 
     private func submit() {

@@ -43,8 +43,11 @@ final class DockSettings {
         let defaults = UserDefaults.standard
         // Only kinds never seen before are auto-added, so a kind the user disabled stays disabled.
         let seen = Set((defaults.array(forKey: seenKey) as? [String] ?? []).compactMap(WidgetKind.init(rawValue:)))
+        // Decode as [String] then map through the initializer so one unknown/renamed rawValue drops
+        // just that entry instead of throwing away the user's entire saved layout.
         if let data = defaults.data(forKey: widgetsKey),
-           let decoded = try? JSONDecoder().decode([WidgetKind].self, from: data) {
+           let raw = try? JSONDecoder().decode([String].self, from: data) {
+            let decoded = raw.compactMap(WidgetKind.init(rawValue:))
             let known = Set(decoded)
             enabledWidgets = decoded + Self.defaultOrder.filter { !seen.contains($0) && !known.contains($0) }
         } else {
@@ -52,6 +55,9 @@ final class DockSettings {
         }
         edge = DockEdge(rawValue: defaults.string(forKey: edgeKey) ?? "") ?? .bottom
         defaults.set(WidgetKind.allCases.map(\.rawValue), forKey: seenKey)
+        // didSet doesn't fire for assignments in init, so persist the merged list now — otherwise a
+        // newly added widget kind shows once then vanishes on the next launch (seen but not saved).
+        persist(enabledWidgets, key: widgetsKey)
     }
 
     func toggle(_ kind: WidgetKind) {

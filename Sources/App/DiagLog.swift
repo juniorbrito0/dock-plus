@@ -19,8 +19,12 @@ enum DiagLog {
                 try? data.write(to: url)
             } else if let handle = try? FileHandle(forWritingTo: url) {
                 defer { try? handle.close() }
-                handle.seekToEndOfFile()
-                handle.write(data)
+                // Throwing variants: the legacy seekToEndOfFile()/write() raise an uncatchable
+                // ObjC exception on I/O failure, which would crash the app from a log write.
+                do {
+                    try handle.seekToEnd()
+                    try handle.write(contentsOf: data)
+                } catch {}
             }
         }
     }

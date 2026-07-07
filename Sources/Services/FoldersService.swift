@@ -24,7 +24,7 @@ final class FoldersService {
 
     private let defaultsKey = "favoriteFolderPaths"
     private let fileLimit = 40
-    private var thumbnails: [String: NSImage] = [:]
+    private let thumbnails = NSCache<NSString, NSImage>()
 
     private init() {}
 
@@ -49,16 +49,23 @@ final class FoldersService {
         persist()
     }
 
-    func files(in folder: FavoriteFolder) -> [FolderFile] {
-        let urls = (try? FileManager.default.contentsOfDirectory(
-            at: folder.url,
-            includingPropertiesForKeys: nil,
-            options: [.skipsHiddenFiles]
-        )) ?? []
-        return urls
-            .sorted { $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending }
-            .prefix(fileLimit)
-            .map { FolderFile(id: $0.path, name: FileManager.default.displayName(atPath: $0.path), url: $0) }
+    // Directory enumeration + per-file displayName is disk I/O that stutters the dock on slow or
+    // network volumes, so run it off the main actor and hand back a Sendable snapshot.
+    func files(in folder: FavoriteFolder) async -> [FolderFile] {
+        let url = folder.url
+        let limit = fileLimit
+        return await Task.detached {
+            let fm = FileManager.default
+            let urls = (try? fm.contentsOfDirectory(
+                at: url,
+                includingPropertiesForKeys: nil,
+                options: [.skipsHiddenFiles]
+            )) ?? []
+            return urls
+                .sorted { $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending }
+                .prefix(limit)
+                .map { FolderFile(id: $0.path, name: fm.displayName(atPath: $0.path), url: $0) }
+        }.value
     }
 
     func open(_ file: FolderFile) {
@@ -70,9 +77,10 @@ final class FoldersService {
     }
 
     func thumbnail(for file: FolderFile) async -> NSImage {
-        if let cached = thumbnails[file.id] { return cached }
+        let key = file.id as NSString
+        if let cached = thumbnails.object(forKey: key) { return cached }
         let image = await generateThumbnail(for: file.url) ?? fallbackIcon(for: file.id)
-        thumbnails[file.id] = image
+        thumbnails.setObject(image, forKey: key)
         return image
     }
 

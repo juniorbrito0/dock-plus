@@ -23,7 +23,7 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>Made by brito.ai · Junior Brito · © 2026</string>
+	<string>An app by brito.ai · © 2026</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Cool Dock shows your upcoming events in the calendar widget.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>

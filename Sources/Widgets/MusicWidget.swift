@@ -5,9 +5,7 @@ struct MusicWidget: DockWidgetView {
     @State private var expanded = false
     init() {}
 
-    private func width(units: CGFloat) -> CGFloat {
-        Theme.Size.tile * units + Theme.Spacing.md * (units - 1)
-    }
+    private static let idleWidthUnits: CGFloat = 1
 
     var body: some View {
         Group {
@@ -17,16 +15,9 @@ struct MusicWidget: DockWidgetView {
                 idle
             }
         }
-        .frame(width: width(units: music.hasTrack ? WidgetKind.music.widthUnits : WidgetKind.battery.widthUnits),
+        .frame(width: Theme.Size.tileWidth(units: music.hasTrack ? WidgetKind.music.widthUnits : Self.idleWidthUnits),
                height: Theme.Size.tile)
-        .background(
-            RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                .fill(Theme.Color.tileFill)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                .strokeBorder(Theme.Color.tileStroke, lineWidth: 1)
-        )
+        .tileChrome()
         .animation(Theme.Motion.spring, value: music.hasTrack)
         .popover(isPresented: $expanded, arrowEdge: .top) {
             ExpandedMusicView(music: music)
@@ -193,7 +184,7 @@ private struct Artwork: View {
     var body: some View {
         RoundedRectangle(cornerRadius: size > 60 ? 16 : 9, style: .continuous)
             .fill(LinearGradient(
-                colors: [Theme.Color.accent.opacity(0.9), Color(hex: 0x6366F1).opacity(0.9)],
+                colors: [Theme.Color.accent.opacity(0.9), Theme.Color.accentSecondary.opacity(0.9)],
                 startPoint: .topLeading, endPoint: .bottomTrailing
             ))
             .frame(width: size, height: size)

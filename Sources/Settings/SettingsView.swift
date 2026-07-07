@@ -121,7 +121,7 @@ struct SettingsView: View {
                     }
                 }
 
-                Text("Made by brito.ai · Junior Brito · © 2026")
+                Text("An app by brito.ai · © 2026")
                     .font(.footnote)
                     .foregroundStyle(.tertiary)
                     .padding(.top, 4)

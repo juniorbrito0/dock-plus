@@ -63,6 +63,8 @@ final class RemindersService {
     private let store = EKEventStore()
     private let scopeKey = "remindersScope"
     private var task: Task<Void, Never>?
+    private var refreshing = false
+    private var refreshPending = false
 
     private init() {
         let stored = UserDefaults.standard.string(forKey: scopeKey) ?? "today"
@@ -85,12 +87,26 @@ final class RemindersService {
         task = nil
     }
 
+    // Coalesce overlapping refreshes (30s timer, scope switch, add/complete/reschedule): only one
+    // fetch runs at a time, and any request that arrives mid-flight re-runs once at the end so the
+    // latest state always wins and no needed refresh is dropped.
     func refresh() async {
+        if refreshing { refreshPending = true; return }
+        refreshing = true
+        defer { refreshing = false }
+        repeat {
+            refreshPending = false
+            await performRefresh()
+        } while refreshPending
+    }
+
+    private func performRefresh() async {
         let status = EKEventStore.authorizationStatus(for: .reminder)
         authorized = status == .fullAccess || status == .authorized
         guard authorized else { reminders = []; lists = []; return }
 
-        lists = store.calendars(for: .reminder)
+        let allCalendars = store.calendars(for: .reminder)
+        lists = allCalendars
             .map { ReminderList(id: $0.calendarIdentifier, title: $0.title) }
             .sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
 
@@ -101,7 +117,7 @@ final class RemindersService {
         // Scope a specific list at the query level; Today/All fetch everything, then filter below.
         let calendars: [EKCalendar]?
         if case .list(let id) = currentScope {
-            calendars = store.calendars(for: .reminder).filter { $0.calendarIdentifier == id }
+            calendars = allCalendars.filter { $0.calendarIdentifier == id }
         } else {
             calendars = nil
         }

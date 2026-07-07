@@ -96,7 +96,7 @@ private struct MinimizeButton: View {
         }
         .buttonStyle(.plain)
         .onHover { hovering = $0 }
-        .help("Minimize Cool Dock")
+        .help("Minimize Dock+")
         .animation(Theme.Motion.quick, value: hovering)
     }
 }
@@ -127,7 +127,7 @@ private struct MinimizedHandle: View {
         }
         .buttonStyle(.plain)
         .onHover { hovering = $0 }
-        .help("Show Cool Dock")
+        .help("Show Dock+")
         .animation(Theme.Motion.spring, value: hovering)
     }
 }

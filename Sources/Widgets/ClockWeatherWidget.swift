@@ -4,9 +4,16 @@ struct ClockWeatherWidget: DockWidgetView {
     @State private var weather = WeatherService.shared
     init() {}
 
+    private static var nextMinute: Date {
+        Calendar.current.nextDate(after: Date(), matching: DateComponents(second: 0),
+                                  matchingPolicy: .nextTime) ?? Date()
+    }
+
     var body: some View {
         WidgetTile(widthUnits: WidgetKind.clockWeather.widthUnits) {
-            TimelineView(.periodic(from: .now, by: 1)) { context in
+            // Only hour+minute are shown, so tick once per minute (aligned to the :00 boundary)
+            // instead of 60× more often — far fewer redraws/wakeups on an always-on panel.
+            TimelineView(.periodic(from: Self.nextMinute, by: 60)) { context in
                 let date = context.date
                 HStack(spacing: Theme.Spacing.xs) {
                     VStack(alignment: .leading, spacing: 0) {

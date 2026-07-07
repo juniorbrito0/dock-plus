@@ -52,6 +52,10 @@ final class DockWindowController: NSObject, NSWindowDelegate {
         DockVisibilityMonitor.shared.start()
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     func show() {
         panel.orderFrontRegardless()
         reposition()

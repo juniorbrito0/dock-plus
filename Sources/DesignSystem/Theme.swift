@@ -7,6 +7,7 @@ enum Theme {
     enum Color {
         static let accent = SwiftUI.Color(hex: 0x2DD4BF)      // electric teal — reserved for live/active
         static let accentSoft = SwiftUI.Color(hex: 0x2DD4BF).opacity(0.18)
+        static let accentSecondary = SwiftUI.Color(hex: 0x6366F1)  // indigo — second gradient stop
         static let warning = SwiftUI.Color(hex: 0xF59E0B)
         static let danger = SwiftUI.Color(hex: 0xEF4444)
         static let positive = SwiftUI.Color(hex: 0x34D399)
@@ -36,6 +37,11 @@ enum Theme {
         static let tile: CGFloat = 64          // square tile edge
         static let barHeight: CGFloat = 84     // bar height including padding
         static let iconGlyph: CGFloat = 22
+
+        // A tile spanning `units` squares, including the inter-tile gaps it swallows.
+        static func tileWidth(units: CGFloat) -> CGFloat {
+            tile * units + Spacing.md * (units - 1)
+        }
     }
 
     enum Motion {

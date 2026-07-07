@@ -5,9 +5,7 @@ struct EmailWidget: DockWidgetView {
     @State private var expanded = false
     init() {}
 
-    private var width: CGFloat {
-        Theme.Size.tile * WidgetKind.email.widthUnits + Theme.Spacing.md * (WidgetKind.email.widthUnits - 1)
-    }
+    private var width: CGFloat { Theme.Size.tileWidth(units: WidgetKind.email.widthUnits) }
 
     private var headline: String {
         guard email.isMailRunning else { return "Mail not open" }
@@ -40,14 +38,7 @@ struct EmailWidget: DockWidgetView {
             }
             .frame(width: width, height: Theme.Size.tile, alignment: .leading)
             .padding(.horizontal, Theme.Spacing.md)
-            .background(
-                RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                    .fill(Theme.Color.tileFill)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                    .strokeBorder(Theme.Color.tileStroke, lineWidth: 1)
-            )
+            .tileChrome()
         }
         .buttonStyle(.plain)
         .popover(isPresented: $expanded, arrowEdge: .top) {

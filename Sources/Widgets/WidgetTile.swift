@@ -7,15 +7,27 @@ struct WidgetTile<Content: View>: View {
 
     @State private var hovering = false
 
-    private var width: CGFloat { Theme.Size.tile * widthUnits + Theme.Spacing.md * (widthUnits - 1) }
+    private var width: CGFloat { Theme.Size.tileWidth(units: widthUnits) }
 
     var body: some View {
         content
             .frame(width: width, height: Theme.Size.tile, alignment: .leading)
             .padding(.horizontal, Theme.Spacing.md)
+            .tileChrome(hovering: hovering)
+            .scaleEffect(hovering ? 1.04 : 1)
+            .animation(Theme.Motion.spring, value: hovering)
+            .onHover { hovering = $0 }
+    }
+}
+
+// The glass-card look shared by every tile: a frosted backing so tiles read as solid cards against
+// the more-transparent bar frame, a white wash for definition (brighter on hover), and a hairline.
+private struct TileChrome: ViewModifier {
+    var hovering: Bool
+
+    func body(content: Content) -> some View {
+        content
             .background(
-                // Each tile gets its own frosted backing so it reads as a solid card against the
-                // (much more transparent) bar frame, plus a white wash for definition on hover.
                 ZStack {
                     VisualEffectView(material: .hudWindow)
                     RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
@@ -27,9 +39,12 @@ struct WidgetTile<Content: View>: View {
                 RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
                     .strokeBorder(Theme.Color.tileStroke, lineWidth: 1)
             )
-            .scaleEffect(hovering ? 1.04 : 1)
-            .animation(Theme.Motion.spring, value: hovering)
-            .onHover { hovering = $0 }
+    }
+}
+
+extension View {
+    func tileChrome(hovering: Bool = false) -> some View {
+        modifier(TileChrome(hovering: hovering))
     }
 }
 

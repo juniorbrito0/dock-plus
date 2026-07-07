@@ -12,14 +12,7 @@ struct AppLauncherWidget: DockWidgetView {
         }
         .padding(.horizontal, Theme.Spacing.md)
         .frame(height: Theme.Size.tile)
-        .background(
-            RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                .fill(Theme.Color.tileFill)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                .strokeBorder(Theme.Color.tileStroke, lineWidth: 1)
-        )
+        .tileChrome()
     }
 }
 

@@ -59,7 +59,7 @@ final class MusicService {
             playlistName = ""; playlistTracks = []
             return
         }
-        let lines = (await Self.run(Self.playlistScript)).split(separator: "\n", omittingEmptySubsequences: false)
+        let lines = (await AppleScriptRunner.run(Self.playlistScript)).split(separator: "\n", omittingEmptySubsequences: false)
         guard let first = lines.first, !first.isEmpty else {
             playlistName = ""; playlistTracks = []
             return
@@ -79,7 +79,7 @@ final class MusicService {
             .replacingOccurrences(of: "\"", with: "\\\"")
         let script = "tell application \"Music\" to play (first track of current playlist whose name is \"\(safeName)\")"
         Task {
-            _ = await Self.run(script)
+            _ = await AppleScriptRunner.run(script)
             await refresh()
         }
     }
@@ -88,7 +88,7 @@ final class MusicService {
         guard !source.isEmpty else { return }
         let script = "tell application \"\(source)\" to \(command)"
         Task {
-            _ = await Self.run(script)
+            _ = await AppleScriptRunner.run(script)
             await refresh()
         }
     }
@@ -98,8 +98,8 @@ final class MusicService {
         // uninstalled app fails to even compile, so we gate by running bundle IDs first.
         let running = Set(NSWorkspace.shared.runningApplications.compactMap(\.bundleIdentifier))
         var outputs: [String] = []
-        if running.contains("com.spotify.client") { outputs.append(await Self.run(Self.spotifyScript)) }
-        if running.contains("com.apple.Music") { outputs.append(await Self.run(Self.musicScript)) }
+        if running.contains("com.spotify.client") { outputs.append(await AppleScriptRunner.run(Self.spotifyScript)) }
+        if running.contains("com.apple.Music") { outputs.append(await AppleScriptRunner.run(Self.musicScript)) }
 
         let parsed = outputs
             .map { $0.components(separatedBy: "\t") }
@@ -151,25 +151,4 @@ final class MusicService {
         end try
     end tell
     """
-
-    private nonisolated static func run(_ script: String) async -> String {
-        await withCheckedContinuation { continuation in
-            DispatchQueue.global(qos: .utility).async {
-                let process = Process()
-                process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-                process.arguments = ["-e", script]
-                let pipe = Pipe()
-                process.standardOutput = pipe
-                process.standardError = FileHandle.nullDevice
-                do {
-                    try process.run()
-                    let data = pipe.fileHandleForReading.readDataToEndOfFile()
-                    process.waitUntilExit()
-                    continuation.resume(returning: String(data: data, encoding: .utf8) ?? "")
-                } catch {
-                    continuation.resume(returning: "")
-                }
-            }
-        }
-    }
 }

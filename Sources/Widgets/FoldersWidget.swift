@@ -25,18 +25,7 @@ struct FoldersWidget: DockWidgetView {
         }
         .padding(.horizontal, Theme.Spacing.md)
         .frame(height: Theme.Size.tile)
-        .background(
-            ZStack {
-                VisualEffectView(material: .hudWindow)
-                RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                    .fill(Theme.Color.tileFill)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                .strokeBorder(Theme.Color.tileStroke, lineWidth: 1)
-        )
+        .tileChrome()
         .onAppear { folders.load() }
     }
 
@@ -147,7 +136,7 @@ private struct FolderContentsView: View {
         }
         .padding(Theme.Spacing.md)
         .frame(width: 300)
-        .onAppear { files = service.files(in: folder) }
+        .task { files = await service.files(in: folder) }
     }
 }
 
