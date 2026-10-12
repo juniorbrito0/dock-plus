@@ -31,6 +31,7 @@ struct SettingsView: View {
         .frame(width: 400, height: 620)
         .onAppear {
             permissions.startPolling()
+            loginItem.refresh()
             bookmarks.load()
             folders.load()
             quickActions.load()
@@ -132,11 +133,17 @@ struct SettingsView: View {
 
     private var widgetsTab: some View {
         List {
-            Section("Enabled") {
+            Section {
                 ForEach(settings.enabledWidgets) { kind in
-                    enabledRow(kind)
+                    EnabledWidgetRow(kind: kind, settings: settings)
                 }
                 .onMove(perform: settings.move)
+            } header: {
+                Text("Enabled")
+            } footer: {
+                ReorderHint(text: settings.edge == .left || settings.edge == .right
+                            ? "Drag ≡ or use the arrows to reorder. Top of the list is the top of the dock."
+                            : "Drag ≡ or use the arrows to reorder. Top of the list is the left end of the dock.")
             }
             if !disabledWidgets.isEmpty {
                 Section("Available") {
@@ -150,7 +157,7 @@ struct SettingsView: View {
 
     private var contentTab: some View {
         List {
-            Section("Favorite Apps") {
+            Section {
                 ForEach(apps.favorites) { app in
                     appRow(app)
                 }
@@ -162,9 +169,13 @@ struct SettingsView: View {
                         .foregroundStyle(Theme.Color.accent)
                 }
                 .buttonStyle(.plain)
+            } header: {
+                Text("Favorite Apps")
+            } footer: {
+                ReorderHint(text: "Drag ≡ to reorder.")
             }
 
-            Section("Bookmarks") {
+            Section {
                 if bookmarks.saved.isEmpty {
                     emptyRow("No bookmarks yet")
                 } else {
@@ -173,9 +184,13 @@ struct SettingsView: View {
                     }
                     .onMove(perform: bookmarks.move)
                 }
+            } header: {
+                Text("Bookmarks")
+            } footer: {
+                if bookmarks.saved.count > 1 { ReorderHint(text: "Drag ≡ to reorder.") }
             }
 
-            Section("Folders") {
+            Section {
                 if folders.folders.isEmpty {
                     emptyRow("No folders yet")
                 } else {
@@ -184,9 +199,13 @@ struct SettingsView: View {
                     }
                     .onMove(perform: folders.move)
                 }
+            } header: {
+                Text("Folders")
+            } footer: {
+                if folders.folders.count > 1 { ReorderHint(text: "Drag ≡ to reorder.") }
             }
 
-            Section("Quick Actions") {
+            Section {
                 ForEach(quickActions.enabledActions) { action in
                     quickActionRow(action, enabled: true)
                 }
@@ -194,6 +213,10 @@ struct SettingsView: View {
                 ForEach(disabledActions) { action in
                     quickActionRow(action, enabled: false)
                 }
+            } header: {
+                Text("Quick Actions")
+            } footer: {
+                ReorderHint(text: "Drag ≡ to reorder the actions you've turned on.")
             }
         }
     }
@@ -215,20 +238,6 @@ struct SettingsView: View {
         quickActions.available.filter { !quickActions.enabledIDs.contains($0.id) }
     }
 
-    private func enabledRow(_ kind: WidgetKind) -> some View {
-        HStack {
-            Label(kind.title, systemImage: kind.symbol)
-            Spacer()
-            Button {
-                settings.toggle(kind)
-            } label: {
-                Image(systemName: "minus.circle.fill")
-                    .foregroundStyle(.secondary)
-            }
-            .buttonStyle(.plain)
-        }
-    }
-
     private func availableRow(_ kind: WidgetKind) -> some View {
         HStack {
             Label(kind.title, systemImage: kind.symbol)
@@ -246,6 +255,7 @@ struct SettingsView: View {
 
     private func appRow(_ app: FavoriteApp) -> some View {
         HStack {
+            DragHandle()
             Image(nsImage: app.icon)
                 .resizable()
                 .frame(width: 18, height: 18)
@@ -262,6 +272,7 @@ struct SettingsView: View {
 
     private func bookmarkRow(_ bookmark: Bookmark) -> some View {
         HStack {
+            DragHandle()
             VStack(alignment: .leading, spacing: 1) {
                 Text(bookmark.title).font(.system(size: 13, weight: .medium))
                 Text(bookmark.host).font(.system(size: 11)).foregroundStyle(.secondary)
@@ -278,6 +289,7 @@ struct SettingsView: View {
 
     private func folderRow(_ folder: FavoriteFolder) -> some View {
         HStack {
+            DragHandle()
             Image(nsImage: folder.icon)
                 .resizable()
                 .frame(width: 18, height: 18)
@@ -294,6 +306,7 @@ struct SettingsView: View {
 
     private func quickActionRow(_ action: QuickAction, enabled: Bool) -> some View {
         HStack {
+            DragHandle().opacity(enabled ? 1 : 0)
             Label(action.title, systemImage: action.symbol)
                 .foregroundStyle(enabled ? .primary : .secondary)
             Spacer()

@@ -10,11 +10,11 @@ final class LoginItemService {
 
     private let configuredKey = "loginItemConfigured"
 
-    private init() {}
+    // Stored (not computed) so the Settings toggle re-renders: @Observable can't see changes
+    // inside SMAppService, so a computed read left the checkbox snapping back after a click.
+    private(set) var isEnabled = SMAppService.mainApp.status == .enabled
 
-    var isEnabled: Bool {
-        SMAppService.mainApp.status == .enabled
-    }
+    private init() {}
 
     // Called at launch: enable on first run, and otherwise re-register so the login item always
     // points at the current bundle path (self-heals if the app moved, e.g. build folder → /Applications).
@@ -44,6 +44,15 @@ final class LoginItemService {
         } catch {
             DiagLog.log("LoginItem toggle failed: \(error.localizedDescription)")
         }
+        refresh()
+    }
+
+    // Picks up changes made in System Settings ▸ General ▸ Login Items while Dock+ is running.
+    func refresh() {
+        let status = SMAppService.mainApp.status
+        // .requiresApproval means it's registered but waiting on the user in System Settings;
+        // show it as on so the click registers, and the system notification explains the rest.
+        isEnabled = status == .enabled || status == .requiresApproval
     }
 
     // A classic login item (added via System Settings or an older build) launches the app too, but
