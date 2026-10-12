@@ -1,5 +1,5 @@
 /* ============================================================
-   Dock+ — design system
+   Dock+: design system
    Warm graphite glass + electric-teal accent (echoes the app's
    Theme.swift: accent #2DD4BF, warning #F59E0B, danger #EF4444).
    Dark by default; light via [data-theme="light"].
@@ -124,7 +124,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ambient backdrop — pure CSS, visible without JS */
+/* ambient backdrop: pure CSS, visible without JS */
 body::before {
   content: "";
   position: fixed;

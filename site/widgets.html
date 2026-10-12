@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Widgets — Dock+</title>
-  <meta name="description" content="The full catalog of Dock+ widgets: Clock, Weather, Music, Calendar, Mail, System, Battery, Apps, Folders, Bookmarks, Emoji, Ask Claude, 1Password, Quick Actions and Dia Tabs." />
+  <title>Widgets: Dock+</title>
+  <meta name="description" content="The full catalog of Dock+ widgets: Clock and Weather, Music, Calendar, Reminders, Mail, System, Battery, Apps, Folders, Bookmarks, Dia Tabs, Emoji, Ask Claude, 1Password, Quick Actions, Chrome Search." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -26,108 +26,97 @@
   <main>
     <section class="hero wrap" style="padding-bottom: var(--s-7)">
       <span class="eyebrow" style="justify-content:center">The catalog</span>
-      <h1 style="font-size: clamp(2.2rem, 5vw, var(--t-3xl))">Fifteen widgets,<br /><span class="grad">all on one bar</span></h1>
-      <p class="lede" style="margin: 0 auto">Mix and match. Each widget is a single tile that does one thing well — and many let you act, not just look. Tags show what runs <span class="tag local">on-device</span> versus the one widget that makes a <span class="tag net">network call</span>.</p>
+      <h1 style="font-size: clamp(2.2rem, 5vw, var(--t-3xl))">Sixteen widgets,<br /><span class="grad">all on one bar</span></h1>
+      <p class="lede" style="margin: 0 auto">Mix and match. Each widget is one tile that does one thing well, and most let you act, not just look. Tags show what stays <span class="tag local">on-device</span> and the one widget that makes a <span class="tag net">network call</span>.</p>
     </section>
 
     <section class="section wrap" style="padding-top: var(--s-4)">
       <div class="widget-grid">
-
         <article class="widget" data-reveal>
           <div class="ico">🕘</div>
-          <div><h3>Clock <span class="tag local">Local</span></h3>
-          <p>Time and date at a glance, formatted for your locale. Nothing to configure — it just keeps time.</p></div>
+          <div><h3>Clock &amp; Weather <span class="tag net">Network</span></h3>
+          <p>Time, date, temperature, conditions and your city in one tile. Weather comes from the free <strong>Open-Meteo</strong> service, using your approximate location. No account, no key.</p></div>
         </article>
-
-        <article class="widget" data-reveal>
-          <div class="ico">🌤️</div>
-          <div><h3>Weather <span class="tag net">Network</span></h3>
-          <p>Current local conditions and temperature, powered by the keyless <strong>Open-Meteo</strong> API. Uses your approximate location — no API key, no account.</p></div>
-        </article>
-
         <article class="widget" data-reveal>
           <div class="ico">🎧</div>
           <div><h3>Music <span class="tag local">Local</span></h3>
-          <p>Now-playing artwork, play/pause and skip controls, plus your current playlist in a popover. Works with <strong>Apple Music</strong> and <strong>Spotify</strong> (Spotify shows now-playing; full playlist listing is Music.app).</p></div>
+          <p>Now playing with play/pause and skip. Click for your current playlist. Works with <strong>Apple Music</strong> and <strong>Spotify</strong> (the playlist view is Apple Music only).</p></div>
         </article>
-
         <article class="widget" data-reveal>
           <div class="ico">📅</div>
           <div><h3>Calendar <span class="tag local">Local</span></h3>
-          <p>Your next event with smart <strong>urgency color-coding</strong> — calm when it's hours away, amber as it approaches, red when it's now. Read locally from your Mac's calendars.</p></div>
+          <p>Your next event, with long titles wrapping onto two lines. Shown in your accent color, then <strong>amber</strong> under 30 minutes and <strong>pulsing red</strong> under 10. <strong>Click to open the event in Calendar.</strong></p></div>
         </article>
-
+        <article class="widget" data-reveal>
+          <div class="ico">✅</div>
+          <div><h3>Reminders <span class="tag local">Local</span></h3>
+          <p>How many reminders are open. Click to add a reminder, tick one off, or move it to Today, Tomorrow or Next Week. Show all lists or just one.</p></div>
+        </article>
         <article class="widget" data-reveal>
           <div class="ico">✉️</div>
           <div><h3>Mail <span class="tag local">Local</span></h3>
-          <p>The last three messages in your inbox. <strong>Archive or delete inline</strong> straight from the tile, so you can triage without opening Mail.</p></div>
+          <p>Your latest inbox messages. <strong>Click one to open that exact email in Mail.</strong> Hover to snooze it (Mail's Remind Me), archive it or delete it.</p></div>
         </article>
-
         <article class="widget" data-reveal>
           <div class="ico">📊</div>
           <div><h3>System <span class="tag local">Local</span></h3>
-          <p>Live <strong>CPU and RAM</strong> usage, read directly from the kernel. A quiet pulse when your Mac is working hard.</p></div>
+          <p>Live <strong>CPU and memory</strong> use, read directly from macOS.</p></div>
         </article>
-
         <article class="widget" data-reveal>
           <div class="ico">🔋</div>
           <div><h3>Battery <span class="tag local">Local</span></h3>
-          <p>Charge level and charging state via IOKit. Know at a glance whether you can wander off without the charger.</p></div>
+          <p>Charge level and whether you're plugged in.</p></div>
         </article>
-
         <article class="widget" data-reveal>
           <div class="ico">🚀</div>
           <div><h3>Apps <span class="tag local">Local</span></h3>
-          <p>A favorite-app launcher right on the bar. Pin the apps you open all day and launch them with one click.</p></div>
+          <p>Your favorite apps on the bar. One click to open.</p></div>
         </article>
-
         <article class="widget" data-reveal>
           <div class="ico">📁</div>
           <div><h3>Folders <span class="tag local">Local</span></h3>
-          <p>Pinned folders with <strong>QuickLook file previews</strong>. Peek inside a project or your Downloads without opening Finder.</p></div>
+          <p>Pinned folders. Click for a preview of what's inside, double-click to open in Finder.</p></div>
         </article>
-
         <article class="widget" data-reveal>
           <div class="ico">🔖</div>
           <div><h3>Bookmarks <span class="tag local">Local</span></h3>
-          <p>A drop zone for links. Drag a URL onto the tile to save it, then open your shortcuts with a click.</p></div>
+          <p>Drag a link onto the tile to save it, then click to open it later.</p></div>
         </article>
-
-        <article class="widget" data-reveal>
-          <div class="ico">😀</div>
-          <div><h3>Emoji <span class="tag local">Local</span></h3>
-          <p>Your <strong>top-5 most-used</strong> emoji plus a full picker. Click one and Dock+ pastes it straight into whatever app you're focused on.</p></div>
-        </article>
-
-        <article class="widget" data-reveal>
-          <div class="ico">✦</div>
-          <div><h3>Ask Claude <span class="tag local">Local</span></h3>
-          <p>One click opens a fresh chat in the <strong>Claude desktop app</strong>. Your shortcut to asking, drafting or debugging without hunting for the window.</p></div>
-        </article>
-
-        <article class="widget" data-reveal>
-          <div class="ico">🔑</div>
-          <div><h3>1Password <span class="tag local">Local</span></h3>
-          <p>Search your vault and copy a password to the clipboard — authorized with <strong>Touch ID</strong> through the local <code>op</code> CLI. Nothing is transmitted, and the clipboard auto-clears after 90 seconds.</p></div>
-        </article>
-
-        <article class="widget" data-reveal>
-          <div class="ico">⚙️</div>
-          <div><h3>Quick Actions <span class="tag local">Local</span></h3>
-          <p>One-tap system shortcuts — take a <strong>screenshot</strong>, <strong>sleep the display</strong>, and more. The small chores you keep digging through menus for.</p></div>
-        </article>
-
         <article class="widget" data-reveal>
           <div class="ico">🧭</div>
           <div><h3>Dia Tabs <span class="tag local">Local</span></h3>
-          <p>See your open tabs in the Dia browser and jump straight to any one — right from the bar.</p></div>
+          <p>Your open tabs in the Dia browser. Click one to jump straight to it.</p></div>
         </article>
-
+        <article class="widget" data-reveal>
+          <div class="ico">😀</div>
+          <div><h3>Emoji <span class="tag local">Local</span></h3>
+          <p>Your <strong>five most-used</strong> emoji plus the full picker. Click one and it's pasted into the app you're typing in.</p></div>
+        </article>
+        <article class="widget" data-reveal>
+          <div class="ico">✦</div>
+          <div><h3>Ask Claude <span class="tag local">Local</span></h3>
+          <p>Type a question and press Return to start a new chat in the <strong>Claude desktop app</strong>.</p></div>
+        </article>
+        <article class="widget" data-reveal>
+          <div class="ico">🔑</div>
+          <div><h3>1Password <span class="tag local">Local</span></h3>
+          <p>Search your logins. Every result has buttons to <strong>copy the username, the password or the verification code</strong>, or to <strong>open the website</strong>. The clipboard clears itself after 90 seconds.</p></div>
+        </article>
+        <article class="widget" data-reveal>
+          <div class="ico">⚙️</div>
+          <div><h3>Quick Actions <span class="tag local">Local</span></h3>
+          <p>One-click shortcuts: Screenshot, Screenshot to Clipboard, Sleep Display, Lock Screen, Screen Saver, Empty Trash, Toggle Dark Mode, Mute/Unmute and Open Downloads. Pick the ones you want; the tile grows to fit them.</p></div>
+        </article>
+        <article class="widget" data-reveal>
+          <div class="ico">🔎</div>
+          <div><h3>Chrome Search <span class="tag local">Local</span></h3>
+          <p>Type a search or a web address and press Return to open it in a new <strong>Google Chrome</strong> tab. The list button shows your open Chrome tabs; click one to switch to it.</p></div>
+        </article>
       </div>
 
       <div class="cta-band" data-reveal style="margin-top: var(--s-8)">
-        <h2>Pick your set, then forget the menu bar.</h2>
-        <p class="lede">Enable only what you need in Settings, choose your edge, and arrange your perfect glanceable strip.</p>
+        <h2>Pick your set.</h2>
+        <p class="lede">Turn on only what you need, drag the tiles into your order, and choose your accent color in Settings.</p>
         <div class="btn-row">
           <a href="instructions.html" class="btn btn-primary">How to set it up</a>
           <a href="index.html#download" class="btn btn-ghost">Download Dock+</a>

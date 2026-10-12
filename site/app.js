@@ -1,4 +1,4 @@
-/* Dock+ — progressive enhancement only. The site is fully usable without this file. */
+/* Dock+: progressive enhancement only. The site is fully usable without this file. */
 (function () {
   "use strict";
 

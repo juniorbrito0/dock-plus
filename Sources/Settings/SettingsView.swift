@@ -123,7 +123,7 @@ struct SettingsView: View {
 
                 section("Favorite apps") {
                     HStack {
-                        Text("\(apps.favorites.count) apps in launcher — manage in the Content tab")
+                        Text("\(apps.favorites.count) apps in launcher. Manage them in the Content tab.")
                             .foregroundStyle(.secondary)
                         Spacer()
                         Button("Add App…") { pickApp() }

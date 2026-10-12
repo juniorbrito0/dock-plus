@@ -71,7 +71,7 @@ private struct FolderIconButton: View {
         .onTapGesture(count: 2, perform: onDoubleTap)
         .onTapGesture(count: 1, perform: onTap)
         .onHover { hovering = $0 }
-        .help("\(folder.name) — double-click to open in Finder")
+        .help("\(folder.name): double-click to open in Finder")
     }
 }
 

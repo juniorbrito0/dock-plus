@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Privacy Policy — Dock+</title>
+  <title>Privacy Policy: Dock+</title>
   <meta name="description" content="Dock+ is on-device and data-light: no accounts, no analytics, no telemetry. The only data that leaves your Mac is the Weather widget's location lookup, sent to Open-Meteo and to Apple. Effective 2026-06-30." />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -32,10 +32,10 @@
 
     <section class="section wrap" style="padding-top: var(--s-3)">
       <div class="prose">
-        <p class="meta">Effective date: <strong>30 June 2026</strong> · Applies to: the Dock+ macOS application</p>
+        <p class="meta">Effective date: <strong>12 October 2026</strong> · Applies to: the Dock+ macOS application</p>
 
         <div class="callout">
-          <p><strong>The short version.</strong> Dock+ has no accounts, no analytics, no trackers and no telemetry. Almost everything happens entirely on your device. The only data that ever leaves your Mac is your approximate location, used by the Weather widget for two related lookups: it goes to the Open-Meteo weather service to fetch your local conditions, and to Apple (via macOS Location Services) to turn those coordinates into a city name. Nothing else is transmitted, ever — and disabling the Weather widget eliminates both.</p>
+          <p><strong>The short version.</strong> Dock+ has no accounts, no analytics, no trackers and no telemetry. Almost everything happens entirely on your device. The only data that ever leaves your Mac is your approximate location, used by the Weather widget for two related lookups: it goes to the Open-Meteo weather service to fetch your local conditions, and to Apple (via macOS Location Services) to turn those coordinates into a city name. Nothing else is transmitted, ever, and disabling the Weather widget eliminates both.</p>
         </div>
 
         <h2>1. Who we are</h2>
@@ -45,36 +45,39 @@
         <p>Dock+ is designed around the principle of collecting and transmitting as little as possible. We do not operate accounts, servers, or a backend that receives your information. We do not use analytics SDKs, advertising identifiers, crash-reporting beacons, or any form of usage tracking. We have no ability to see how you use Dock+, because that information never reaches us.</p>
 
         <h2>3. The data that leaves your device</h2>
-        <p>If you enable the <strong>Weather widget</strong>, Dock+ uses your <strong>approximate coordinates</strong> for two weather-related lookups. Your location is obtained through macOS Location Services, which you control and can revoke at any time, and Dock+ requests <strong>reduced (kilometer-level) accuracy</strong> — <code>kCLLocationAccuracyKilometer</code>, roughly a 1 km radius — rather than precise GPS, so the coordinates are deliberately coarse. If you disable the Weather widget, Dock+ makes no outbound network requests at all.</p>
-        <p>First, Dock+ sends those approximate coordinates to the <a href="https://open-meteo.com" rel="noopener">Open-Meteo</a> public weather API (api.open-meteo.com, hosted in Germany/EU) to retrieve current conditions for your area. This request requires no API key and contains nothing beyond the coordinates needed to return a local forecast — no identifier, no account, no other personal data. Open-Meteo is an independent service with its own privacy practices; please refer to their website for how they handle requests.</p>
+        <p>If you enable the <strong>Weather widget</strong>, Dock+ uses your <strong>approximate coordinates</strong> for two weather-related lookups. Your location is obtained through macOS Location Services, which you control and can revoke at any time, and Dock+ requests <strong>reduced (kilometer-level) accuracy</strong> (<code>kCLLocationAccuracyKilometer</code>, roughly a 1 km radius) rather than precise GPS, so the coordinates are deliberately coarse. If you disable the Weather widget, Dock+ makes no outbound network requests at all.</p>
+        <p>First, Dock+ sends those approximate coordinates to the <a href="https://open-meteo.com" rel="noopener">Open-Meteo</a> public weather API (api.open-meteo.com, hosted in Germany/EU) to retrieve current conditions for your area. This request requires no API key and contains nothing beyond the coordinates needed to return a local forecast: no identifier, no account, no other personal data. Open-Meteo is an independent service with its own privacy practices; please refer to their website for how they handle requests.</p>
         <p>Second, to display a readable place name (your city) rather than raw numbers, Dock+ asks macOS to reverse-geocode the coordinates using Apple's <code>CLGeocoder</code>. This is performed by macOS Location Services and sends the coordinates to Apple, whose handling of that request is governed by <a href="https://www.apple.com/legal/privacy/" rel="noopener">Apple's privacy policy</a>. These two lookups are the only data Dock+ transmits, both serve the Weather widget, and disabling that widget eliminates both.</p>
 
         <h2>4. Data that stays on your Mac</h2>
         <p>Several widgets read information from your Mac to display it to you. This data is processed locally on your device, is shown only to you, and is <strong>never sent to us or to any third party</strong>:</p>
         <ul>
-          <li><strong>Calendar</strong> — your next event is read locally through Apple's EventKit framework to show it on the tile.</li>
-          <li><strong>Mail</strong> — your last three inbox messages are read locally (via AppleScript / Apple Mail) so you can triage them; archive and delete actions are performed locally in Mail.</li>
-          <li><strong>Music</strong> — now-playing details, playback controls and your current playlist are read from Apple Music or Spotify locally on your Mac.</li>
-          <li><strong>System &amp; Battery</strong> — CPU, memory and battery readings come directly from the operating system kernel.</li>
-          <li><strong>Apps, Folders, Bookmarks, Emoji, Quick Actions</strong> — these operate entirely on local files, links and system actions you provide.</li>
+          <li><strong>Calendar</strong>: your next event is read locally through Apple's EventKit framework to show it on the tile. Clicking the tile opens the event in Apple's Calendar app on your Mac.</li>
+          <li><strong>Reminders</strong>: your open reminders are read and updated locally through EventKit when you add, complete or reschedule them.</li>
+          <li><strong>Mail</strong>: your last three inbox messages are read locally (via AppleScript / Apple Mail) so you can open or triage them; snooze, archive and delete actions are performed locally in Mail.</li>
+          <li><strong>Music</strong>: now-playing details, playback controls and your current playlist are read from Apple Music or Spotify locally on your Mac.</li>
+          <li><strong>Dia Tabs and Chrome Search</strong>: the titles and addresses of your open Dia or Google Chrome tabs are read locally (via AppleScript) only to list them and switch to the one you pick. Searches and addresses you type into Chrome Search are handed to Google Chrome on your Mac, which then contacts the site or search engine like any browser.</li>
+          <li><strong>System &amp; Battery</strong>: CPU, memory and battery readings come directly from the operating system kernel.</li>
+          <li><strong>Window positions</strong>: if <em>Keep windows from covering Dock+</em> is on, Dock+ reads the position and size of other apps' windows locally (via the Accessibility permission) only to keep them from overlapping the bar. It does not read window contents.</li>
+          <li><strong>Apps, Folders, Bookmarks, Emoji, Quick Actions, Ask Claude</strong>: these operate entirely on local files, links, apps and system actions you provide.</li>
         </ul>
-        <p><strong>Retention.</strong> Any cached weather or last-known-location data stays on your Mac, is overwritten on the next refresh, and is removed when you delete the app — just as a copied 1Password credential is auto-cleared from the clipboard after 90 seconds (see section 5).</p>
+        <p><strong>Retention.</strong> Any cached weather or last-known-location data stays on your Mac, is overwritten on the next refresh, and is removed when you delete the app, just as a copied 1Password credential is auto-cleared from the clipboard after 90 seconds (see section 5).</p>
 
         <h2>5. 1Password integration</h2>
-        <p>The optional 1Password widget works entirely on your device through 1Password's own command-line tool (<code>op</code>), which you authorize with Touch ID. When you copy a credential, it is placed on your macOS clipboard and <strong>automatically cleared after 90 seconds</strong>. Dock+ never logs, stores, or transmits your passwords or vault contents. All access is local to your Mac and governed by 1Password's own security.</p>
+        <p>The optional 1Password widget works entirely on your device through 1Password's own command-line tool (<code>op</code>), which you authorize with Touch ID. When you copy a username, password or one-time verification code, it is placed on your macOS clipboard and <strong>automatically cleared after 90 seconds</strong>. Dock+ never logs, stores, or transmits your passwords or vault contents. All access is local to your Mac and governed by 1Password's own security.</p>
 
         <h2>6. Clipboard</h2>
         <p>Some actions (copying a password, pasting an emoji) use the macOS clipboard so the result reaches the app you're using. Dock+ does not read your clipboard for any other purpose and does not transmit clipboard contents anywhere. Copied passwords are auto-cleared after 90 seconds as described above.</p>
 
         <h2>7. Permissions</h2>
-        <p>Dock+ requests macOS permissions only for the widgets you use — Calendar, Location, Automation (to control Music and Mail), and Accessibility (to paste emoji into the focused app). Each prompt appears the first time you use the relevant widget. You can review or revoke any permission at any time in <em>System Settings ▸ Privacy &amp; Security</em>. Declining a permission simply disables the widget that needs it.</p>
+        <p>Dock+ requests macOS permissions only for the features you use: Calendar, Reminders, Location, Automation (to control Music or Spotify, Mail, System Events, Google Chrome and Dia), and Accessibility (to paste emoji into the focused app and to keep other windows from covering Dock+). Each prompt appears the first time you use the relevant widget. You can review or revoke any permission at any time in <em>System Settings ▸ Privacy &amp; Security</em>. Declining a permission simply disables the widget that needs it.</p>
 
         <h2>8. Children's privacy</h2>
         <p>Dock+ is a general-purpose utility and is not directed at children. It does not knowingly collect personal information from anyone, including children.</p>
 
         <h2>9. Your rights</h2>
         <p>Because Dock+ does not collect, store, or transmit your personal data to us, there is no personal data held by us to access, correct, export, or delete. Information shown by the app lives on your own Mac and remains under your control. Under regulations such as the EU/UK <strong>GDPR</strong>, Canada's <strong>PIPEDA</strong>, California's <strong>CCPA/CPRA</strong>, and Brazil's <strong>LGPD</strong>, you retain your data-subject and consumer rights; given our data-minimization design there is no off-device processing of your personal information by us to request action on. If you have a question or wish to exercise a right, contact us and we'll respond.</p>
-        <p><strong>Legal basis (GDPR).</strong> The only personal data Dock+ causes to be processed is the approximate-location weather lookup described in section 3. The lawful basis for that processing is your <strong>consent</strong> (GDPR Art. 6(1)(a); LGPD Art. 7, I), which you give by enabling the Weather widget and granting macOS Location access. You can withdraw that consent at any time — and stop the processing — by disabling the Weather widget or revoking the Location permission in System Settings. Open-Meteo and Apple act as the recipients of that request under their own privacy terms.</p>
+        <p><strong>Legal basis (GDPR).</strong> The only personal data Dock+ causes to be processed is the approximate-location weather lookup described in section 3. The lawful basis for that processing is your <strong>consent</strong> (GDPR Art. 6(1)(a); LGPD Art. 7, I), which you give by enabling the Weather widget and granting macOS Location access. You can withdraw that consent at any time (and stop the processing) by disabling the Weather widget or revoking the Location permission in System Settings. Open-Meteo and Apple act as the recipients of that request under their own privacy terms.</p>
 
         <h2>10. International users</h2>
         <p>The only cross-border data flows in Dock+ are the two coordinate-based weather lookups described in section 3, both initiated from your device and each containing only your approximate coordinates. The forecast request goes to Open-Meteo, hosted in Germany (EU); the reverse-geocoding request goes to Apple, which may process it in the United States. Each transfer is handled under the receiving provider's own privacy policy and transfer safeguards (Open-Meteo's terms and Apple's privacy policy, respectively). Dock+ itself operates no servers and transmits no other personal data across borders.</p>

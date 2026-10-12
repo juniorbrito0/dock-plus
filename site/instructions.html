@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Get started — Dock+</title>
-  <meta name="description" content="Install Dock+, add and arrange widgets, and grant the macOS permissions it needs — and why each one matters." />
+  <title>Get started: Dock+</title>
+  <meta name="description" content="Install Dock+, arrange your widgets, change settings, and grant the macOS permissions it needs, with the reason for each one." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -27,7 +27,7 @@
     <section class="hero wrap" style="padding-bottom: var(--s-6)">
       <span class="eyebrow" style="justify-content:center">Get started</span>
       <h1 style="font-size: clamp(2.2rem, 5vw, var(--t-3xl))">Up and running<br /><span class="grad">in two minutes</span></h1>
-      <p class="lede" style="margin: 0 auto">Install Dock+, arrange your widgets, and grant a few macOS permissions. Here's the whole thing, plus exactly why each permission is asked for.</p>
+      <p class="lede" style="margin: 0 auto">Install Dock+, arrange your widgets and grant a few macOS permissions. Here's the whole thing, including why each permission is needed.</p>
     </section>
 
     <section class="section wrap" style="padding-top: var(--s-4)">
@@ -36,39 +36,68 @@
         <h2>Install</h2>
         <ol class="steps">
           <li>
-            <h3>Download &amp; move to Applications</h3>
-            <p><a href="https://github.com/juniorbrito0/dock-plus/releases/latest/download/Dock-Plus.dmg">Download Dock+</a>, then drag <strong>Dock+.app</strong> into your <code>/Applications</code> folder.</p>
+            <h3>Download and move to Applications</h3>
+            <p><a href="https://github.com/juniorbrito0/dock-plus/releases/latest/download/Dock-Plus.dmg">Download Dock+</a>, open the disk image and drag <strong>Dock+.app</strong> into your <code>Applications</code> folder.</p>
           </li>
           <li>
             <h3>Open it</h3>
-            <p>Double-click to launch. On first run, right-click → <strong>Open</strong> if macOS asks. Dock+ is a menu-bar app — it has no Dock icon of its own and won't appear in cmd-tab. From then on it <strong>launches automatically at login</strong>; turn that off anytime in <em>Settings ▸ General ▸ Startup</em>.</p>
+            <p>Double-click Dock+ in Applications. It's signed and notarized by Apple, so it opens without warnings. Dock+ lives in the menu bar: it has no Dock icon of its own and doesn't appear when you press Command + Tab.</p>
           </li>
           <li>
-            <h3>Find it in the menu bar</h3>
-            <p>Look for the Dock+ icon in your menu bar. Everything — settings, widget toggles, the edge picker — lives in that menu.</p>
+            <h3>Open Settings</h3>
+            <p>Click the Dock+ icon in the menu bar (four small squares) and choose <strong>Settings &amp; Permissions…</strong>. Grant the permissions for the widgets you want, and turn on <em>Start Dock+ automatically at login</em> if you like.</p>
           </li>
         </ol>
 
-        <h2>Add, remove &amp; reorder widgets</h2>
+        <h2>Settings</h2>
+        <h3>General</h3>
         <ul>
-          <li><strong>Enable or disable</strong> any of the 15 widgets from <em>Settings ▸ Widgets</em>. Switch off what you don't use for a tighter bar.</li>
-          <li><strong>Order</strong> follows your enabled list — the top of the list is the first tile on the bar. (Drag-to-reorder is on the roadmap; for now, toggle in the order you want.)</li>
-          <li><strong>Pick the edge</strong> your dock lives on, and add your favorite apps for the Apps widget, all in Settings.</li>
-          <li>The bar caps at your screen width and scrolls when it's full — if you run all 15, disable a few or let it scroll.</li>
+          <li><strong>Permissions</strong>: see what's granted and grant what's missing in one place.</li>
+          <li><strong>Dock position</strong>: bottom or top of the screen.</li>
+          <li><strong>Keep windows from covering Dock+</strong> (on by default): windows open, move and resize normally but stop at the edge of Dock+. Full-screen windows and dialogs are left alone, and minimizing Dock+ gives the space back.</li>
+          <li><strong>Accent color</strong>: eight presets or any custom color. The whole dock changes instantly.</li>
+          <li><strong>Startup</strong>: start Dock+ automatically at login.</li>
+        </ul>
+        <h3>Widgets</h3>
+        <ul>
+          <li>Add a widget with the plus button, remove it with the minus button.</li>
+          <li>Reorder by dragging the <strong>≡</strong> handle or with the up and down arrows. The top of the list is the left end of the dock.</li>
+        </ul>
+        <h3>Content</h3>
+        <ul>
+          <li>Manage your favorite apps, bookmarks, folders and quick actions. Drag the <strong>≡</strong> handle to reorder.</li>
         </ul>
 
         <div class="callout">
-          <p><strong>Discreet by design.</strong> Collapse Dock+ to a slim handle anytime you want the screen back; one click restores it. And if you use an auto-hidden Dock, Dock+ automatically <strong>lifts up out of the way</strong> the moment the system Dock reveals, then settles back.</p>
+          <p><strong>Need the screen back?</strong> Click any empty spot on the bar to shrink Dock+ to a small handle; click the handle to restore it. If your system Dock auto-hides, Dock+ lifts out of its way when it appears.</p>
         </div>
 
-        <h2>Permissions — and why each is needed</h2>
-        <p>Dock+ only asks for what a given widget needs, and only when you first use it. macOS will prompt you; you can review and revoke any of these later in <em>System Settings ▸ Privacy &amp; Security</em>. Here's the full list and the reason for each.</p>
+        <h2>How to</h2>
+        <ul>
+          <li><strong>Open your next meeting</strong>: click the Calendar tile.</li>
+          <li><strong>Open an email</strong>: click the Mail tile, then click the email.</li>
+          <li><strong>Copy a verification code</strong>: open 1Password, search, and click the clock button on the result.</li>
+          <li><strong>Search the web</strong>: type in Chrome Search and press Return. Click the list button to jump to an open tab.</li>
+          <li><strong>Save a bookmark</strong>: drag a link from your browser onto the Bookmarks tile.</li>
+          <li><strong>Show one reminders list</strong>: open the Reminders tile and pick the list from its menu.</li>
+        </ul>
+
+        <h2>Permissions, and why each is needed</h2>
+        <p>Dock+ only asks for what your widgets use. You can review or remove any permission later in <em>System Settings ▸ Privacy &amp; Security</em>.</p>
 
         <div class="perm">
           <div class="ico">📅</div>
           <div>
             <h3>Calendar</h3>
-            <p>So the <strong>Calendar widget</strong> can show your next event and color-code it by urgency. Events are read locally and never leave your Mac.</p>
+            <p>So the <strong>Calendar widget</strong> can show your next event and open it in Calendar. Events are read on your Mac and never leave it.</p>
+          </div>
+        </div>
+
+        <div class="perm">
+          <div class="ico">✅</div>
+          <div>
+            <h3>Reminders</h3>
+            <p>So the <strong>Reminders widget</strong> can show, add, complete and reschedule your reminders, locally.</p>
           </div>
         </div>
 
@@ -76,7 +105,7 @@
           <div class="ico">📍</div>
           <div>
             <h3>Location</h3>
-            <p>So the <strong>Weather widget</strong> can fetch conditions for where you are. Only your <em>approximate</em> coordinates are used, and they go to Open-Meteo and nowhere else.</p>
+            <p>So the <strong>Clock &amp; Weather widget</strong> can show conditions where you are. Only your approximate location is used, and only for the weather.</p>
           </div>
         </div>
 
@@ -84,7 +113,7 @@
           <div class="ico">🤖</div>
           <div>
             <h3>Automation</h3>
-            <p>So Dock+ can <strong>control Music and triage Mail</strong> — play/pause, skip tracks, read your now-playing and last three messages, archive or delete inline. This uses AppleScript to talk to apps you already have open; nothing is sent off-device.</p>
+            <p>So Dock+ can talk to other apps on your Mac: <strong>Music or Spotify</strong> (playback), <strong>Mail</strong> (open, archive, delete), <strong>System Events</strong> (Mail's snooze), <strong>Google Chrome</strong> (list and switch tabs) and <strong>Dia</strong> (list and switch tabs). macOS asks once per app, the first time it's needed.</p>
           </div>
         </div>
 
@@ -92,7 +121,7 @@
           <div class="ico">♿</div>
           <div>
             <h3>Accessibility</h3>
-            <p>So the <strong>Emoji widget</strong> can paste your pick into whatever app you're currently focused on. Without it, Dock+ can't insert text into other apps.</p>
+            <p>So the <strong>Emoji widget</strong> can paste into the app you're typing in, and so Dock+ can <strong>keep windows from covering it</strong> by gently resizing windows that overlap the bar.</p>
           </div>
         </div>
 
@@ -100,16 +129,23 @@
           <div class="ico">🔑</div>
           <div>
             <h3>1Password CLI (Touch ID)</h3>
-            <p>The <strong>1Password widget</strong> uses 1Password's own command-line tool, <code>op</code>, which you authorize with Touch ID. Searches and copies happen entirely on your Mac. Copied passwords land on your clipboard and <strong>auto-clear after 90 seconds</strong> — never logged, never transmitted.</p>
+            <p>The <strong>1Password widget</strong> uses 1Password's own command-line tool, <code>op</code>, which you approve with Touch ID. Copied items clear from your clipboard after 90 seconds and are never logged or sent anywhere.</p>
           </div>
         </div>
 
         <div class="callout">
-          <p>Skipping a permission only disables the widget that needs it — the rest of Dock+ keeps working. You're always in control from <em>System Settings ▸ Privacy &amp; Security</em>, and there's a guided <em>Permissions</em> panel inside Dock+'s own Settings.</p>
+          <p>Skipping a permission only switches off the feature that needs it. Everything else keeps working.</p>
         </div>
 
+        <h2>Setting up 1Password</h2>
+        <ol class="steps">
+          <li><h3>Install the 1Password CLI</h3><p>Run <code>brew install 1password-cli</code>, or follow <a href="https://developer.1password.com/docs/cli/get-started/" rel="noopener">1Password's guide</a>.</p></li>
+          <li><h3>Turn on the integration</h3><p>In the 1Password app, open <strong>Settings ▸ Developer</strong> and turn on <strong>Integrate with 1Password CLI</strong>.</p></li>
+          <li><h3>Approve Dock+</h3><p>Open the 1Password widget (click <strong>Retry</strong> if needed) and approve the prompt with Touch ID.</p></li>
+        </ol>
+
         <h2>That's it</h2>
-        <p>Enable the widgets you want, grant the permissions for the ones you use, and your second Dock is live. Curious about what each widget does? See the <a href="widgets.html">full catalog</a>. Wondering about privacy? Read the <a href="privacy.html">privacy policy</a> — Dock+ is on-device and data-light by design.</p>
+        <p>Curious about what each widget does? See the <a href="widgets.html">full catalog</a>. Something not working? Check the <a href="faq.html">FAQ</a>. Wondering about your data? Read the <a href="privacy.html">privacy policy</a>.</p>
 
       </div>
     </section>

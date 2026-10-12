@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FAQ — Dock+</title>
-  <meta name="description" content="Answers to common questions about Dock+: privacy, accounts, macOS version, Spotify support, 1Password, and whether it phones home." />
+  <title>FAQ: Dock+</title>
+  <meta name="description" content="Answers to common questions about Dock+: privacy, accounts, macOS version, permissions, 1Password setup, Chrome and Mail, and keeping windows clear." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -27,7 +27,7 @@
     <section class="hero wrap" style="padding-bottom: var(--s-6)">
       <span class="eyebrow" style="justify-content:center">FAQ</span>
       <h1 style="font-size: clamp(2.2rem, 5vw, var(--t-3xl))">Questions,<br /><span class="grad">answered</span></h1>
-      <p class="lede" style="margin: 0 auto">The things people ask most about Dock+ — privacy, accounts, compatibility and how the integrations work.</p>
+      <p class="lede" style="margin: 0 auto">The things people ask most about Dock+: privacy, setup, permissions and fixes for common hiccups.</p>
     </section>
 
     <section class="section wrap" style="padding-top: var(--s-4)">
@@ -35,55 +35,70 @@
 
         <details class="faq-item" open>
           <summary>Is my data private?</summary>
-          <div class="faq-body"><p>Yes. Dock+ is on-device and data-light. There are no accounts, no analytics, no trackers and no telemetry. Calendar, Mail and Music data are read locally through macOS frameworks and AppleScript and never leave your Mac. The one exception is the Weather widget, which sends your approximate coordinates to two recipients — Open-Meteo (in the EU) to fetch local conditions, and Apple (via macOS Location Services) to turn the coordinates into a city name. Those weather lookups are the only data that leaves your Mac, and disabling the widget stops both. Full detail is in the <a href="privacy.html">privacy policy</a>.</p></div>
+          <div class="faq-body"><p>Yes. Dock+ has no accounts, no analytics, no trackers and no telemetry. Your calendar, reminders, mail, music, passwords and browser tabs are read on your Mac and never leave it. The only exception is the weather: your approximate location goes to Open-Meteo for the forecast and to Apple (through macOS Location Services) to find your city name. Turn off the weather widget and that stops too. Details are in the <a href="privacy.html">privacy policy</a>.</p></div>
         </details>
 
         <details class="faq-item">
-          <summary>Does it need an account or sign-in?</summary>
-          <div class="faq-body"><p>No. There's nothing to sign up for and no login. Download it, grant the permissions for the widgets you use, and you're done. Your settings live locally on your Mac.</p></div>
+          <summary>Does it need an account?</summary>
+          <div class="faq-body"><p>No. There's nothing to sign up for. Download it, grant the permissions for the widgets you use, and you're done. Your settings stay on your Mac.</p></div>
         </details>
 
         <details class="faq-item">
           <summary>Which version of macOS do I need?</summary>
-          <div class="faq-body"><p>macOS 14 Sonoma or later. Dock+ is a native SwiftUI app and runs on both Apple silicon and Intel Macs.</p></div>
+          <div class="faq-body"><p>macOS 14 Sonoma or later, on Apple silicon or Intel.</p></div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Is it free?</summary>
+          <div class="faq-body"><p>Yes. Dock+ is free and open source under the MIT license. The code is on <a href="https://github.com/juniorbrito0/dock-plus" target="_blank" rel="noopener noreferrer">GitHub</a>.</p></div>
+        </details>
+
+        <details class="faq-item">
+          <summary>A permission still says “Not set” after I allowed it.</summary>
+          <div class="faq-body"><p>Click <strong>Grant</strong> in Dock+'s own Settings: macOS only lists an app under a permission after the app asks. If no prompt appears, use <em>No prompt? Open System Settings ▸ Privacy</em> and switch Dock+ on there.</p></div>
+        </details>
+
+        <details class="faq-item">
+          <summary>I see two Dock+ entries in System Settings.</summary>
+          <div class="faq-body"><p>One is left over from an older version. Remove both with the minus button, then grant the permission again from Dock+'s Settings.</p></div>
+        </details>
+
+        <details class="faq-item">
+          <summary>The 1Password widget says “No accounts configured”.</summary>
+          <div class="faq-body"><p>Install the 1Password CLI (<code>brew install 1password-cli</code>), turn on <strong>Integrate with 1Password CLI</strong> in 1Password ▸ Settings ▸ Developer, then click <strong>Retry</strong> in the widget and approve the prompt. See the <a href="instructions.html">setup guide</a>.</p></div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Clicking a Chrome tab or an email does nothing the first time.</summary>
+          <div class="faq-body"><p>macOS is waiting for you to allow Automation. Answer the prompt, or turn Dock+ on under System Settings ▸ Privacy &amp; Security ▸ Automation.</p></div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Will Dock+ cover my windows?</summary>
+          <div class="faq-body"><p>No. With <strong>Keep windows from covering Dock+</strong> on (the default), windows stop at its top edge. It needs the Accessibility permission. Full-screen windows are left alone, and minimizing Dock+ gives the space back.</p></div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Can I move it or change its look?</summary>
+          <div class="faq-body"><p>Yes. Put it at the bottom or top of the screen, reorder or remove widgets, and pick an accent color, all in Settings.</p></div>
         </details>
 
         <details class="faq-item">
           <summary>Does the Music widget work with Spotify?</summary>
-          <div class="faq-body"><p>Yes. The Music widget shows now-playing and offers play/pause and skip controls for both Apple Music and Spotify. The current-playlist listing in the popover is Apple Music only for now; with Spotify you'll see the now-playing track and controls.</p></div>
+          <div class="faq-body"><p>Yes, for now playing and controls. The playlist view is Apple Music only.</p></div>
         </details>
 
         <details class="faq-item">
-          <summary>How does the 1Password widget work?</summary>
-          <div class="faq-body"><p>It uses 1Password's own command-line tool, <code>op</code>, which you authorize with Touch ID. You search your vault from the tile, and the password you choose is copied to your clipboard — entirely on your Mac. Nothing is transmitted by Dock+, and the clipboard auto-clears after 90 seconds so a copied secret doesn't linger. You'll need the 1Password app and its CLI integration enabled; see the <a href="instructions.html">setup guide</a>.</p></div>
-        </details>
-
-        <details class="faq-item">
-          <summary>Does Dock+ phone home?</summary>
-          <div class="faq-body"><p>No. Dock+ has no servers of its own, no analytics and no auto-update beacon. Its only outbound requests come from the Weather widget, which sends your approximate coordinates to two recipients: Open-Meteo (in the EU) to fetch the forecast, and Apple (via macOS Location Services) to reverse-geocode the coordinates into a city name. Disable the Weather widget and Dock+ makes no network calls at all.</p></div>
-        </details>
-
-        <details class="faq-item">
-          <summary>Why does it ask for so many permissions?</summary>
-          <div class="faq-body"><p>Each permission powers a specific widget — Calendar for your next event, Location for weather, Automation for Music and Mail, Accessibility for emoji paste. Dock+ only asks when you first use the widget that needs it, and skipping one just disables that single widget. The <a href="instructions.html">setup guide</a> explains each one and why it's needed.</p></div>
-        </details>
-
-        <details class="faq-item">
-          <summary>Will it get in the way of my Dock or my windows?</summary>
-          <div class="faq-body"><p>No. Dock+ floats as a non-activating panel that never steals focus and never appears in cmd-tab. If you use an auto-hidden Dock, it lifts out of the way when the system Dock reveals. And you can collapse it to a slim handle whenever you want the screen back.</p></div>
-        </details>
-
-        <details class="faq-item">
-          <summary>Can I choose which widgets show and where the bar sits?</summary>
-          <div class="faq-body"><p>Yes. Toggle any of the 15 widgets on or off, pick the screen edge, and add your favorite apps — all from Settings in the menu-bar menu. The bar scrolls if you enable more than fits your screen.</p></div>
+          <summary>Dock+ starts at login even though the option is off.</summary>
+          <div class="faq-body"><p>An older login entry may still exist. Remove Dock+ from System Settings ▸ General ▸ Login Items. Turning the option off in Dock+ also clears old entries.</p></div>
         </details>
 
         <div class="cta-band" data-reveal style="margin-top: var(--s-8)">
-          <h2>Still curious?</h2>
-          <p class="lede">Read exactly what Dock+ does and doesn't do with your data.</p>
+          <h2>Still stuck?</h2>
+          <p class="lede">Email <a href="mailto:dockplus@brito.ai">dockplus@brito.ai</a> or open an issue on GitHub.</p>
           <div class="btn-row">
-            <a href="privacy.html" class="btn btn-primary">Read the privacy policy</a>
-            <a href="instructions.html" class="btn btn-ghost">Setup guide</a>
+            <a href="instructions.html" class="btn btn-primary">Setup guide</a>
+            <a href="https://github.com/juniorbrito0/dock-plus/issues" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Report an issue</a>
           </div>
         </div>
 
