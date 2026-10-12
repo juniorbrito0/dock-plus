@@ -71,7 +71,8 @@ enum WidgetKind: String, CaseIterable, Codable, Identifiable {
         case .music: 2.6
         case .email, .askClaude, .chromeSearch: 2.8
         case .emoji: 1.9
-        case .calendar, .appLauncher: 1.7
+        case .calendar: 2.2
+        case .appLauncher: 1.7
         case .systemStats: 1.4
         case .reminders, .battery, .folders, .bookmarks, .onePassword, .quickActions, .diaTabs: 1.0
         }

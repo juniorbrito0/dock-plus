@@ -16,11 +16,11 @@ struct CalendarWidget: DockWidgetView {
     private func content(now: Date) -> some View {
         if let event = calendar.nextEvent, let start = event.startDate {
             let urgency = Urgency(start: start, end: event.endDate, now: now)
-            HStack(spacing: Theme.Spacing.md) {
+            HStack(spacing: Theme.Spacing.sm) {
                 ZStack {
                     Circle()
                         .fill(urgency.tint.opacity(0.18))
-                        .frame(width: 34, height: 34)
+                        .frame(width: 28, height: 28)
                     Circle()
                         .fill(urgency.tint)
                         .frame(width: 9, height: 9)
@@ -31,12 +31,16 @@ struct CalendarWidget: DockWidgetView {
                                    : .default, value: urgency.pulses)
                 }
                 VStack(alignment: .leading, spacing: 2) {
+                    // Two smaller lines, shrinking a little more if needed, so most titles fit whole.
                     Text(event.title ?? "Event")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.system(size: 11.5, weight: .semibold))
                         .foregroundStyle(Theme.Color.textPrimary)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.85)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .help(event.title ?? "")
                     Text(urgency.label)
-                        .font(.system(size: 11, weight: .semibold))
+                        .font(.system(size: 10.5, weight: .semibold))
                         .foregroundStyle(urgency.tint)
                 }
                 Spacer(minLength: 0)
