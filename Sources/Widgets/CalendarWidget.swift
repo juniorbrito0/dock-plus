@@ -5,11 +5,15 @@ struct CalendarWidget: DockWidgetView {
     init() {}
 
     var body: some View {
-        WidgetTile(widthUnits: WidgetKind.calendar.widthUnits) {
-            TimelineView(.periodic(from: .now, by: 30)) { context in
-                content(now: context.date)
+        Button { calendar.openInCalendar(calendar.nextEvent) } label: {
+            WidgetTile(widthUnits: WidgetKind.calendar.widthUnits) {
+                TimelineView(.periodic(from: .now, by: 30)) { context in
+                    content(now: context.date)
+                }
             }
         }
+        .buttonStyle(.plain)
+        .help(calendar.nextEvent == nil ? "Open Calendar" : "Open in Calendar")
     }
 
     @ViewBuilder
