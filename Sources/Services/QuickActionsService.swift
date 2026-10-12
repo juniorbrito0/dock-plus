@@ -68,8 +68,6 @@ final class QuickActionsService {
         }
     }
 
-    var available: [QuickAction] { catalog }
-
     var enabledActions: [QuickAction] {
         enabledIDs.compactMap { id in catalog.first { $0.id == id } }
     }

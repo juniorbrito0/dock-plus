@@ -47,14 +47,9 @@ final class CalendarService {
         }
     }
 
-    func stop() {
-        task?.cancel()
-        task = nil
-    }
-
     func refresh() async {
         let status = EventKitAccess.status(for: .event)
-        authorized = status == .fullAccess || status == .authorized
+        authorized = status == .fullAccess
         guard authorized else { nextEvent = nil; return }
         let now = Date()
         let end = Calendar.current.date(byAdding: .day, value: 7, to: now) ?? now

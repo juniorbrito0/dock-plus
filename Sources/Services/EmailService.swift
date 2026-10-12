@@ -32,11 +32,6 @@ final class EmailService {
         }
     }
 
-    func stop() {
-        task?.cancel()
-        task = nil
-    }
-
     func activateMail() {
         NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Mail.app"))
     }

@@ -50,15 +50,16 @@ enum DisclaimedSpawn {
         DispatchQueue.global().asyncAfter(deadline: .now() + timeout, execute: watchdog)
 
         // Drain stderr concurrently so a chatty child can't block on a full pipe.
-        var errData = Data()
+        let errBox = DataBox()
         let group = DispatchGroup()
         group.enter()
         DispatchQueue.global().async {
-            errData = errPipe.fileHandleForReading.readDataToEndOfFile()
+            errBox.data = errPipe.fileHandleForReading.readDataToEndOfFile()
             group.leave()
         }
         let outData = outPipe.fileHandleForReading.readDataToEndOfFile()
         group.wait()
+        let errData = errBox.data
 
         var status: Int32 = 0
         waitpid(pid, &status, 0)
@@ -68,4 +69,10 @@ enum DisclaimedSpawn {
                       err: String(data: errData, encoding: .utf8) ?? "",
                       status: exitCode)
     }
+}
+
+// Written once on a background queue and read only after the DispatchGroup wait, so the
+// handoff is ordered even though the compiler can't prove it.
+private final class DataBox: @unchecked Sendable {
+    var data = Data()
 }

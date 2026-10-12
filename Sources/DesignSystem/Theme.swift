@@ -1,6 +1,6 @@
 import SwiftUI
 
-// Cool Dock design system — single source of truth for palette, spacing, radius, motion.
+// Dock+ design system — single source of truth for palette, spacing, radius, motion.
 // Distinctive identity: warm graphite glass with an electric-teal accent reserved for live/active states.
 
 enum Theme {

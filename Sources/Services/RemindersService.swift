@@ -82,11 +82,6 @@ final class RemindersService {
         }
     }
 
-    func stop() {
-        task?.cancel()
-        task = nil
-    }
-
     // Coalesce overlapping refreshes (30s timer, scope switch, add/complete/reschedule): only one
     // fetch runs at a time, and any request that arrives mid-flight re-runs once at the end so the
     // latest state always wins and no needed refresh is dropped.
@@ -101,9 +96,11 @@ final class RemindersService {
     }
 
     private func performRefresh() async {
-        let status = EventKitAccess.status(for: .reminder)
-        authorized = status == .fullAccess || status == .authorized
+        let wasAuthorized = authorized
+        authorized = EventKitAccess.status(for: .reminder) == .fullAccess
         guard authorized else { reminders = []; lists = []; return }
+        // A store created before access was granted keeps serving empty results until reset.
+        if !wasAuthorized { store.reset() }
 
         let allCalendars = store.calendars(for: .reminder)
         lists = allCalendars

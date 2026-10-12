@@ -26,11 +26,6 @@ final class SystemStatsService {
         }
     }
 
-    func stop() {
-        task?.cancel()
-        task = nil
-    }
-
     private func sample() {
         cpuUsage = readCPU()
         memoryUsed = readMemory()
@@ -49,10 +44,12 @@ final class SystemStatsService {
         defer { previousLoad = info }
         guard let prev = previousLoad else { return cpuUsage }
 
-        let user = Double(info.cpu_ticks.0 - prev.cpu_ticks.0)
-        let system = Double(info.cpu_ticks.1 - prev.cpu_ticks.1)
-        let idle = Double(info.cpu_ticks.2 - prev.cpu_ticks.2)
-        let nice = Double(info.cpu_ticks.3 - prev.cpu_ticks.3)
+        // Tick counters are UInt32 summed across cores and wrap after a few weeks of uptime;
+        // wrapping subtraction keeps the delta correct instead of trapping on overflow.
+        let user = Double(info.cpu_ticks.0 &- prev.cpu_ticks.0)
+        let system = Double(info.cpu_ticks.1 &- prev.cpu_ticks.1)
+        let idle = Double(info.cpu_ticks.2 &- prev.cpu_ticks.2)
+        let nice = Double(info.cpu_ticks.3 &- prev.cpu_ticks.3)
         let total = user + system + idle + nice
         guard total > 0 else { return cpuUsage }
         return (user + system + nice) / total

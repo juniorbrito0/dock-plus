@@ -10,10 +10,7 @@ struct DiaTab: Identifiable, Sendable, Equatable {
     let title: String
     let url: String
 
-    var host: String {
-        guard let host = URL(string: url)?.host else { return url }
-        return host.hasPrefix("www.") ? String(host.dropFirst(4)) : host
-    }
+    var host: String { URLDisplay.host(of: url) }
 }
 
 @MainActor
@@ -53,11 +50,6 @@ final class DiaService {
         }
     }
 
-    func stop() {
-        task?.cancel()
-        task = nil
-    }
-
     func refresh() async {
         guard !refreshing else { return }
         refreshing = true
@@ -66,14 +58,13 @@ final class DiaService {
         isRunning = NSWorkspace.shared.runningApplications.contains { $0.bundleIdentifier == Self.bundleID }
         guard isRunning else { tabs = []; lastError = nil; return }
 
-        let script = Self.readScript
-        let result = await Task.detached { Self.runOSA(script) }.value
-        if let error = result.error, result.output?.isEmpty ?? true {
+        let result = await AppleScriptRunner.runCapturingErrors(Self.readScript)
+        if let error = result.error, result.output.isEmpty {
             lastError = error
             return
         }
         lastError = nil
-        tabs = Self.parse(result.output ?? "")
+        tabs = Self.parse(result.output)
     }
 
     func focus(_ tab: DiaTab) {
@@ -93,11 +84,11 @@ final class DiaService {
             end repeat
         end tell
         """
-        Task.detached { _ = Self.runOSA(script) }
+        Task { _ = await AppleScriptRunner.run(script) }
         activate()
     }
 
-    func activate() {
+    private func activate() {
         guard let appURL else { return }
         let config = NSWorkspace.OpenConfiguration()
         config.activates = true
@@ -131,26 +122,5 @@ final class DiaService {
             return DiaTab(id: "\(wi).\(ti)", windowIndex: wi, tabIndex: ti,
                           title: String(fields[2]), url: String(fields[3]))
         }
-    }
-
-    private nonisolated static func runOSA(_ script: String) -> (output: String?, error: String?) {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-        process.arguments = ["-e", script]
-        let outPipe = Pipe()
-        let errPipe = Pipe()
-        process.standardOutput = outPipe
-        process.standardError = errPipe
-        do {
-            try process.run()
-        } catch {
-            return (nil, error.localizedDescription)
-        }
-        let outData = outPipe.fileHandleForReading.readDataToEndOfFile()
-        let errData = errPipe.fileHandleForReading.readDataToEndOfFile()
-        process.waitUntilExit()
-        let out = String(data: outData, encoding: .utf8)
-        let err = String(data: errData, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
-        return (out, (err?.isEmpty ?? true) ? nil : err)
     }
 }

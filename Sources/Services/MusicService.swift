@@ -38,11 +38,6 @@ final class MusicService {
         }
     }
 
-    func stop() {
-        task?.cancel()
-        task = nil
-    }
-
     func playPause() { sendControl("playpause") }
     func next() { sendControl("next track") }
     func previous() { sendControl("previous track") }

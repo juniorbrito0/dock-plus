@@ -173,7 +173,7 @@ final class PermissionsService: NSObject, CLLocationManagerDelegate {
 
     private func state(_ status: EKAuthorizationStatus) -> PermissionState {
         switch status {
-        case .fullAccess, .authorized: .granted
+        case .fullAccess: .granted
         case .denied, .restricted, .writeOnly: .denied
         case .notDetermined: .notDetermined
         @unknown default: .notDetermined

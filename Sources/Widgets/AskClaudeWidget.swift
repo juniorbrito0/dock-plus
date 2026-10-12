@@ -47,11 +47,3 @@ struct AskClaudeWidget: DockWidgetView {
         query = ""
     }
 }
-
-extension CharacterSet {
-    static let urlQueryValueAllowed: CharacterSet = {
-        var set = CharacterSet.alphanumerics
-        set.insert(charactersIn: "-._~")
-        return set
-    }()
-}

@@ -58,7 +58,7 @@ struct BookmarksWidget: DockWidgetView {
         return handled
     }
 
-    private static func url(from text: String) -> URL? {
+    nonisolated private static func url(from text: String) -> URL? {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let url = URL(string: trimmed), url.scheme != nil else { return nil }
         return url

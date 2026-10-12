@@ -241,7 +241,7 @@ struct SettingsView: View {
     }
 
     private var disabledActions: [QuickAction] {
-        quickActions.available.filter { !quickActions.enabledIDs.contains($0.id) }
+        quickActions.catalog.filter { !quickActions.enabledIDs.contains($0.id) }
     }
 
     private func availableRow(_ kind: WidgetKind) -> some View {

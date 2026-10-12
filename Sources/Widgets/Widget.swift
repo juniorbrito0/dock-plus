@@ -1,7 +1,7 @@
 import SwiftUI
 
-// A dock widget is a self-contained, live tile. Adding a new widget is: conform a
-// type to DockWidget, give it a view, and register its kind in WidgetRegistry.
+// A dock widget is a self-contained, live tile. Adding a new widget is: a new WidgetKind case,
+// a view conforming to DockWidgetView, and a line in WidgetRegistry (DockView.swift).
 enum WidgetKind: String, CaseIterable, Codable, Identifiable {
     case clockWeather
     case music

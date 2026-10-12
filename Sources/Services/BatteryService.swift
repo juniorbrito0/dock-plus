@@ -24,11 +24,6 @@ final class BatteryService {
         }
     }
 
-    func stop() {
-        task?.cancel()
-        task = nil
-    }
-
     private func sample() {
         guard let snapshot = IOPSCopyPowerSourcesInfo()?.takeRetainedValue(),
               let sources = IOPSCopyPowerSourcesList(snapshot)?.takeRetainedValue() as? [CFTypeRef],

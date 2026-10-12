@@ -28,11 +28,6 @@ final class DockVisibilityMonitor {
         }
     }
 
-    func stop() {
-        task?.cancel()
-        task = nil
-    }
-
     private func sample() {
         let target = targetInset()
         guard abs(target - bottomInset) > 0.5 else { return }

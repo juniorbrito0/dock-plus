@@ -7,10 +7,7 @@ struct ChromeTab: Identifiable, Sendable, Equatable {
     let title: String
     let url: String
 
-    var host: String {
-        guard let host = URL(string: url)?.host else { return url }
-        return host.hasPrefix("www.") ? String(host.dropFirst(4)) : host
-    }
+    var host: String { URLDisplay.host(of: url) }
 }
 
 @MainActor

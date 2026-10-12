@@ -94,8 +94,12 @@ final class OnePasswordService {
         let value = result.out.trimmingCharacters(in: .whitespacesAndNewlines)
         guard result.ok, !value.isEmpty else {
             // An item without that field (most often no one-time code) isn't an auth failure.
+            // Match op's specific missing-field errors only: a broad "no " test also caught
+            // "No accounts configured…" and hid real sign-in failures behind "not saved".
             let output = (result.err + " " + result.out).lowercased()
-            if result.ok || output.contains("does not") || output.contains("no ") {
+            let missingField = output.contains("isn't a field") || output.contains("does not have")
+                || output.contains("doesn't contain any otp") || output.contains("no one-time password")
+            if result.ok || missingField {
                 showToast("No \(field.label) saved for \(item.title)")
             } else {
                 status = Self.failureStatus(from: output)

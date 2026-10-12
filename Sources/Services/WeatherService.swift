@@ -71,7 +71,8 @@ final class WeatherService: NSObject, CLLocationManagerDelegate {
             .init(name: "latitude", value: String(latitude)),
             .init(name: "longitude", value: String(longitude)),
             .init(name: "current", value: "temperature_2m,weather_code"),
-            .init(name: "temperature_unit", value: "celsius")
+            // Follow the Mac's region: Fahrenheit for US-measurement locales, Celsius elsewhere.
+            .init(name: "temperature_unit", value: Locale.current.measurementSystem == .us ? "fahrenheit" : "celsius")
         ]
         guard let url = components.url,
               let (data, _) = try? await URLSession.shared.data(from: url),

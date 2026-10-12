@@ -12,9 +12,11 @@ final class LoginItemService {
 
     // Stored (not computed) so the Settings toggle re-renders: @Observable can't see changes
     // inside SMAppService, so a computed read left the checkbox snapping back after a click.
-    private(set) var isEnabled = SMAppService.mainApp.status == .enabled
+    private(set) var isEnabled = false
 
-    private init() {}
+    private let legacyCleanupKey = "legacyLoginItemCleanupDone"
+
+    private init() { refresh() }
 
     // Called at launch: enable on first run, and otherwise re-register so the login item always
     // points at the current bundle path (self-heals if the app moved, e.g. build folder → /Applications).
@@ -24,8 +26,10 @@ final class LoginItemService {
             setEnabled(true)
         } else if SMAppService.mainApp.status == .enabled {
             setEnabled(true)
-        } else {
+        } else if !UserDefaults.standard.bool(forKey: legacyCleanupKey) {
             // The user turned it off: clear any classic login item that would still relaunch us.
+            // Once only, so people who never had one aren't asked to allow System Events each launch.
+            UserDefaults.standard.set(true, forKey: legacyCleanupKey)
             removeLegacyLoginItems()
         }
     }
