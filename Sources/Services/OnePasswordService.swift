@@ -114,7 +114,10 @@ final class OnePasswordService {
     private static func websiteURL(_ href: String?) -> URL? {
         guard let href = href?.trimmingCharacters(in: .whitespaces), !href.isEmpty else { return nil }
         let full = href.contains("://") ? href : "https://\(href)"
-        guard let url = URL(string: full), url.host != nil else { return nil }
+        // Only web links: a vault item (possibly from a shared vault) could carry a file:// or
+        // app-specific scheme that NSWorkspace would happily open.
+        guard let url = URL(string: full), url.host != nil,
+              let scheme = url.scheme?.lowercased(), scheme == "https" || scheme == "http" else { return nil }
         return url
     }
 

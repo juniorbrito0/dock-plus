@@ -149,3 +149,4 @@ Set the app's user-facing name to **Dock+** (product + display name). Parallel a
 - **Settings footer:** "brito.ai" is now a link to https://brito.ai.
 - Build note: building into `dist/DerivedData` fails codesign ("resource fork … detritus") because the project folder carries `com.apple.provenance`; built into a scratch DerivedData instead.
 - Verified: xcodegen OK, SwiftLint 0, Release BUILD SUCCEEDED, installed to /Applications, screenshot of left-edge vertical dock with 2-row quick actions.
+- Security review follow-up: 1Password "open website" now only opens http/https links, so a vault item carrying a `file://` or app-specific link can't launch anything else. Rebuilt (SwiftLint 0, BUILD SUCCEEDED) and reinstalled.
