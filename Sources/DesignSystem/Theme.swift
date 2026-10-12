@@ -5,8 +5,9 @@ import SwiftUI
 
 enum Theme {
     enum Color {
-        static let accent = SwiftUI.Color(hex: 0x2DD4BF)      // electric teal — reserved for live/active
-        static let accentSoft = SwiftUI.Color(hex: 0x2DD4BF).opacity(0.18)
+        // User-selectable (Settings ▸ Accent color); electric teal by default. Reserved for live/active.
+        @MainActor static var accent: SwiftUI.Color { AccentColorStore.shared.color }
+        @MainActor static var accentSoft: SwiftUI.Color { accent.opacity(0.18) }
         static let accentSecondary = SwiftUI.Color(hex: 0x6366F1)  // indigo — second gradient stop
         static let warning = SwiftUI.Color(hex: 0xF59E0B)
         static let danger = SwiftUI.Color(hex: 0xEF4444)

@@ -59,6 +59,7 @@ struct CalendarWidget: DockWidgetView {
 }
 
 // Drives more attention as the event approaches: calm → teal → amber → pulsing red, then "Now".
+@MainActor
 private struct Urgency {
     let tint: Color
     let label: String

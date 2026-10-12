@@ -110,6 +110,10 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                 }
 
+                section("Accent color") {
+                    AccentColorPicker()
+                }
+
                 section("Startup") {
                     Toggle("Start Dock+ automatically at login", isOn: Binding(
                         get: { loginItem.isEnabled },
