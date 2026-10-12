@@ -30,3 +30,6 @@ docs/shots/
 # AI tooling config (local only, not part of the open-source build)
 CLAUDE.md
 .claude/
+
+# Release disk images (published on GitHub Releases, not in git)
+*.dmg
