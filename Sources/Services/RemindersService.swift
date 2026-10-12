@@ -101,7 +101,7 @@ final class RemindersService {
     }
 
     private func performRefresh() async {
-        let status = EKEventStore.authorizationStatus(for: .reminder)
+        let status = EventKitAccess.status(for: .reminder)
         authorized = status == .fullAccess || status == .authorized
         guard authorized else { reminders = []; lists = []; return }
 

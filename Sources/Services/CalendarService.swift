@@ -37,8 +37,8 @@ final class CalendarService {
         task = nil
     }
 
-    private func refresh() async {
-        let status = EKEventStore.authorizationStatus(for: .event)
+    func refresh() async {
+        let status = EventKitAccess.status(for: .event)
         authorized = status == .fullAccess || status == .authorized
         guard authorized else { nextEvent = nil; return }
         let now = Date()

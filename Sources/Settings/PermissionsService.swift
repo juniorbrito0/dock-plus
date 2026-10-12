@@ -59,8 +59,8 @@ final class PermissionsService: NSObject, CLLocationManagerDelegate {
     }
 
     func refresh() {
-        calendar = state(EKEventStore.authorizationStatus(for: .event))
-        reminders = state(EKEventStore.authorizationStatus(for: .reminder))
+        calendar = state(EventKitAccess.status(for: .event))
+        reminders = state(EventKitAccess.status(for: .reminder))
         location = locationState(locationManager.authorizationStatus)
         accessibility = AXIsProcessTrusted() ? .granted : .notDetermined
     }
@@ -106,6 +106,7 @@ final class PermissionsService: NSObject, CLLocationManagerDelegate {
             try? await Task.sleep(for: .milliseconds(500))
             do {
                 let granted = try await eventStore.requestFullAccessToEvents()
+                if granted { EventKitAccess.recordGrant(for: .event) }
                 DiagLog.log("requestCalendar RETURNED granted=\(granted) "
                     + "status=\(EKEventStore.authorizationStatus(for: .event).rawValue)")
             } catch {
@@ -114,6 +115,7 @@ final class PermissionsService: NSObject, CLLocationManagerDelegate {
             timeoutTask.cancel()
             NSApp.setActivationPolicy(.accessory)
             refresh()
+            await CalendarService.shared.refresh()
         }
     }
 
@@ -134,6 +136,7 @@ final class PermissionsService: NSObject, CLLocationManagerDelegate {
             try? await Task.sleep(for: .milliseconds(500))
             do {
                 let granted = try await eventStore.requestFullAccessToReminders()
+                if granted { EventKitAccess.recordGrant(for: .reminder) }
                 DiagLog.log("requestReminders RETURNED granted=\(granted) "
                     + "status=\(EKEventStore.authorizationStatus(for: .reminder).rawValue)")
             } catch {
