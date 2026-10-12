@@ -5,11 +5,15 @@ import SwiftUI
 struct DockView: View {
     @State private var settings = DockSettings.shared
     @State private var chrome = DockChrome.shared
-    @State private var contentWidth: CGFloat = 0
+    @State private var contentLength: CGFloat = 0
+
+    // Docked on the left or right edge, the bar runs top-to-bottom instead of left-to-right.
+    private var vertical: Bool { settings.edge == .left || settings.edge == .right }
 
     // Never let the bar spill off the screen — cap it and scroll the tiles inside.
-    private var maxBarWidth: CGFloat {
-        (NSScreen.main?.visibleFrame.width ?? 1440) - Theme.Spacing.lg * 2 - 24
+    private var maxBarLength: CGFloat {
+        let visible = NSScreen.main?.visibleFrame.size ?? CGSize(width: 1440, height: 900)
+        return (vertical ? visible.height : visible.width) - Theme.Spacing.lg * 2 - 24
     }
 
     var body: some View {
@@ -24,19 +28,23 @@ struct DockView: View {
         .padding(Theme.Spacing.lg)
     }
 
-    private var overflowing: Bool { contentWidth > maxBarWidth && contentWidth > 0 }
+    private var overflowing: Bool { contentLength > maxBarLength && contentLength > 0 }
 
     @ViewBuilder
     private var bar: some View {
         Group {
-            if overflowing {
+            if overflowing && vertical {
+                ScrollView(.vertical, showsIndicators: false) { tiles }
+                    .frame(height: maxBarLength)
+                    .fixedSize(horizontal: true, vertical: false)
+            } else if overflowing {
                 ScrollView(.horizontal, showsIndicators: false) { tiles }
-                    .frame(width: maxBarWidth, height: Theme.Size.barHeight)
+                    .frame(width: maxBarLength, height: Theme.Size.barHeight)
             } else {
                 tiles.fixedSize()
             }
         }
-        .onPreferenceChange(BarWidthKey.self) { contentWidth = $0 }
+        .onPreferenceChange(BarLengthKey.self) { contentLength = $0 }
         .background(
             // Frame runs 60% more transparent: the frosted panel and its tint both drop to 40%.
             ZStack {
@@ -55,16 +63,20 @@ struct DockView: View {
     }
 
     private var tiles: some View {
-        HStack(spacing: Theme.Spacing.md) {
+        let layout = vertical
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Theme.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: Theme.Spacing.md))
+        return layout {
             ForEach(settings.enabledWidgets) { kind in
                 WidgetRegistry.view(for: kind)
             }
-            MinimizeButton { setMinimized(true) }
+            MinimizeButton(vertical: vertical) { setMinimized(true) }
         }
         .padding(Theme.Spacing.md)
         .background(
             GeometryReader { geo in
-                Color.clear.preference(key: BarWidthKey.self, value: geo.size.width)
+                Color.clear.preference(key: BarLengthKey.self,
+                                       value: vertical ? geo.size.height : geo.size.width)
             }
         )
         .background(
@@ -82,16 +94,17 @@ struct DockView: View {
 
 // Intentionally low-key: a faint grip at the trailing edge that brightens only on hover.
 private struct MinimizeButton: View {
+    var vertical = false
     let action: () -> Void
     @State private var hovering = false
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "chevron.compact.right")
+            Image(systemName: vertical ? "chevron.compact.down" : "chevron.compact.right")
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(Theme.Color.textSecondary)
                 .opacity(hovering ? 0.75 : 0.22)
-                .frame(width: 14, height: Theme.Size.tile)
+                .frame(width: vertical ? Theme.Size.tile : 14, height: vertical ? 14 : Theme.Size.tile)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -132,7 +145,7 @@ private struct MinimizedHandle: View {
     }
 }
 
-private struct BarWidthKey: PreferenceKey {
+private struct BarLengthKey: PreferenceKey {
     static let defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = max(value, nextValue())

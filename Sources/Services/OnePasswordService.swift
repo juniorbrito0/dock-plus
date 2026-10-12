@@ -1,7 +1,7 @@
 import Foundation
 import AppKit
 
-// Search 1Password and copy a password to the clipboard via the `op` CLI. The CLI brokers
+// Search 1Password and copy a username, password or one-time code to the clipboard via the `op` CLI. The CLI brokers
 // auth through the desktop app (Touch ID / app integration), so no secrets are ever passed
 // as arguments — `op` resolves the unlocked session itself.
 @MainActor
@@ -13,6 +13,27 @@ final class OnePasswordService {
         let id: String
         let title: String
         let subtitle: String
+        let url: URL?
+    }
+
+    enum Field {
+        case username, password, oneTimeCode
+
+        var label: String {
+            switch self {
+            case .username: "username"
+            case .password: "password"
+            case .oneTimeCode: "code"
+            }
+        }
+
+        var args: [String] {
+            switch self {
+            case .username: ["--fields", "label=username"]
+            case .password: ["--fields", "label=password", "--reveal"]
+            case .oneTimeCode: ["--otp"]
+            }
+        }
     }
 
     enum OPStatus {
@@ -44,8 +65,9 @@ final class OnePasswordService {
             return
         }
         items = listed.map { listed in
-            let subtitle = listed.additionalInformation ?? listed.urls?.first?.href ?? ""
-            return OPItem(id: listed.id, title: listed.title, subtitle: subtitle)
+            let href = listed.urls?.first(where: { $0.primary == true })?.href ?? listed.urls?.first?.href
+            let subtitle = listed.additionalInformation ?? href ?? ""
+            return OPItem(id: listed.id, title: listed.title, subtitle: subtitle, url: Self.websiteURL(href))
         }
         status = .ready
     }
@@ -59,21 +81,45 @@ final class OnePasswordService {
         }
     }
 
-    func copyPassword(_ item: OPItem) async {
-        let result = await Self.run(["item", "get", item.id, "--fields", "label=password", "--reveal"])
-        guard result.ok else {
-            status = Self.failureStatus(from: result.err + " " + result.out)
+    func copy(_ field: Field, of item: OPItem) async {
+        let result = await Self.run(["item", "get", item.id] + field.args)
+        let value = result.out.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard result.ok, !value.isEmpty else {
+            // An item without that field (most often no one-time code) isn't an auth failure.
+            let output = (result.err + " " + result.out).lowercased()
+            if result.ok || output.contains("does not") || output.contains("no ") {
+                showToast("No \(field.label) saved for \(item.title)")
+            } else {
+                status = Self.failureStatus(from: output)
+            }
             return
         }
-        let password = result.out.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !password.isEmpty else { return }
 
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
-        pasteboard.setString(password, forType: .string)
-        scheduleClipboardClear(password)
+        pasteboard.setString(value, forType: .string)
+        scheduleClipboardClear(value)
+        showToast("Copied \(field.label) ✓ \(item.title)")
+    }
 
-        lastCopied = item.title
+    func openWebsite(_ item: OPItem) {
+        guard let url = item.url else {
+            showToast("No website saved for \(item.title)")
+            return
+        }
+        NSWorkspace.shared.open(url)
+    }
+
+    // 1Password stores bare hosts ("github.com") as often as full URLs; give those a scheme.
+    private static func websiteURL(_ href: String?) -> URL? {
+        guard let href = href?.trimmingCharacters(in: .whitespaces), !href.isEmpty else { return nil }
+        let full = href.contains("://") ? href : "https://\(href)"
+        guard let url = URL(string: full), url.host != nil else { return nil }
+        return url
+    }
+
+    private func showToast(_ message: String) {
+        lastCopied = message
         clearToastTask?.cancel()
         clearToastTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(2))
@@ -155,6 +201,7 @@ private struct OPResult {
 
 private struct ListedItemURL: Decodable {
     let href: String
+    let primary: Bool?
 }
 
 private struct ListedItem: Decodable {

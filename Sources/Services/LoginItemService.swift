@@ -24,6 +24,9 @@ final class LoginItemService {
             setEnabled(true)
         } else if SMAppService.mainApp.status == .enabled {
             setEnabled(true)
+        } else {
+            // The user turned it off: clear any classic login item that would still relaunch us.
+            removeLegacyLoginItems()
         }
     }
 
@@ -32,11 +35,26 @@ final class LoginItemService {
             if enabled {
                 // register() is idempotent and refreshes the stored path even when already enabled.
                 try SMAppService.mainApp.register()
-            } else if SMAppService.mainApp.status == .enabled {
-                try SMAppService.mainApp.unregister()
+            } else {
+                if SMAppService.mainApp.status == .enabled {
+                    try SMAppService.mainApp.unregister()
+                }
+                removeLegacyLoginItems()
             }
         } catch {
             DiagLog.log("LoginItem toggle failed: \(error.localizedDescription)")
         }
+    }
+
+    // A classic login item (added via System Settings or an older build) launches the app too, but
+    // SMAppService neither reports nor removes it, so "off" in Settings wouldn't stick without this.
+    private func removeLegacyLoginItems() {
+        let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "Dock+"
+        let script = """
+        tell application "System Events"
+            delete (every login item whose name is "\(name)")
+        end tell
+        """
+        Task.detached { _ = await AppleScriptRunner.run(script) }
     }
 }

@@ -51,14 +51,14 @@ private struct OnePasswordSearchView: View {
             content
 
             if let copied = service.lastCopied {
-                Label("Copied ✓ \(copied)", systemImage: "checkmark.circle.fill")
+                Label(copied, systemImage: "checkmark.circle.fill")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(Theme.Color.positive)
                     .lineLimit(1)
             }
         }
         .padding(Theme.Spacing.lg)
-        .frame(width: 260)
+        .frame(width: 320)
     }
 
     @ViewBuilder
@@ -102,9 +102,7 @@ private struct OnePasswordSearchView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 2) {
                 ForEach(service.filtered(query)) { item in
-                    ResultRow(item: item) {
-                        Task { await service.copyPassword(item) }
-                    }
+                    ResultRow(item: item, service: service)
                 }
             }
         }
@@ -112,41 +110,69 @@ private struct OnePasswordSearchView: View {
     }
 }
 
+// Clicking the row copies the password; the trailing buttons copy each field or open the site.
 private struct ResultRow: View {
     let item: OnePasswordService.OPItem
-    let action: () -> Void
+    let service: OnePasswordService
     @State private var hovering = false
 
     var body: some View {
+        HStack(spacing: 2) {
+            Button { copy(.password) } label: { summary }
+                .buttonStyle(.plain)
+            fieldButton("person", help: "Copy username") { copy(.username) }
+            fieldButton("key", help: "Copy password") { copy(.password) }
+            fieldButton("clock.badge.checkmark", help: "Copy verification code") { copy(.oneTimeCode) }
+            fieldButton("safari", help: "Open website") { service.openWebsite(item) }
+                .opacity(item.url == nil ? 0.35 : 1)
+                .disabled(item.url == nil)
+        }
+        .padding(.trailing, Theme.Spacing.xs)
+        .background(
+            RoundedRectangle(cornerRadius: Theme.Spacing.md, style: .continuous)
+                .fill(hovering ? Theme.Color.tileFillHover : .clear)
+        )
+        .onHover { hovering = $0 }
+    }
+
+    private func copy(_ field: OnePasswordService.Field) {
+        Task { await service.copy(field, of: item) }
+    }
+
+    private func fieldButton(_ symbol: String, help: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            HStack(spacing: Theme.Spacing.md) {
-                Image(systemName: item.subtitle.isEmpty ? "lock.fill" : "globe")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Theme.Color.textSecondary)
-                    .frame(width: 16)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(item.title)
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Theme.Color.textPrimary)
-                        .lineLimit(1)
-                    if !item.subtitle.isEmpty {
-                        Text(item.subtitle)
-                            .font(.system(size: 10))
-                            .foregroundStyle(Theme.Color.textSecondary)
-                            .lineLimit(1)
-                    }
-                }
-                Spacer(minLength: 0)
-            }
-            .padding(.horizontal, Theme.Spacing.sm)
-            .padding(.vertical, Theme.Spacing.sm)
-            .background(
-                RoundedRectangle(cornerRadius: Theme.Spacing.md, style: .continuous)
-                    .fill(hovering ? Theme.Color.tileFillHover : .clear)
-            )
-            .contentShape(Rectangle())
+            Image(systemName: symbol)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(Theme.Color.accent)
+                .frame(width: 24, height: 22)
+                .background(Theme.Color.accentSoft, in: RoundedRectangle(cornerRadius: 6, style: .continuous))
         }
         .buttonStyle(.plain)
-        .onHover { hovering = $0 }
+        .help(help)
+    }
+
+    private var summary: some View {
+        HStack(spacing: Theme.Spacing.md) {
+            Image(systemName: item.subtitle.isEmpty ? "lock.fill" : "globe")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(Theme.Color.textSecondary)
+                .frame(width: 16)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(item.title)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Theme.Color.textPrimary)
+                    .lineLimit(1)
+                if !item.subtitle.isEmpty {
+                    Text(item.subtitle)
+                        .font(.system(size: 10))
+                        .foregroundStyle(Theme.Color.textSecondary)
+                        .lineLimit(1)
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, Theme.Spacing.sm)
+        .padding(.vertical, Theme.Spacing.sm)
+        .contentShape(Rectangle())
     }
 }

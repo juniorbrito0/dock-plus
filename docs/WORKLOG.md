@@ -139,3 +139,13 @@ Set the app's user-facing name to **Dock+** (product + display name). Parallel a
 - **Cause:** the `fetchReminders(matching:completion:)` completion closure inherited `@MainActor` isolation (enclosing class is `@MainActor`), but EventKit invokes it on a background queue. Swift 6's runtime executor assertion fails → hard trap.
 - **Fix:** marked the completion closure `@Sendable` so it's nonisolated. It only touches Sendable data (maps to `ReminderItem`, resumes the continuation), so this is safe; the main-actor hop happens correctly when the continuation returns into `refresh()`.
 - Verified: xcodegen OK, SwiftLint 0, BUILD SUCCEEDED, launched from /Applications — process stays alive through the reminders fetch, no new crash log. Installed build copied over `/Applications/Dock+.app`.
+
+## 2026-10-12: login item, calendar grant, side docking, quick actions, 1Password field buttons, footer link
+- **Start at login kept launching when unchecked [FIXED]:** a classic login item named "Dock+" (System Events list) was relaunching the app; SMAppService neither reports nor removes it. Removed the stray entry on this Mac; `LoginItemService` now deletes classic "Dock+" login items when the toggle is turned off and at launch whenever the toggle is off.
+- **Calendar "Grant access" did nothing [ROOT CAUSE]:** diag log showed `requestCalendar RETURNED granted=false status=0` instantly. The app is signed with Hardened Runtime but had **no entitlements**, so the Calendars resource was blocked before any prompt. Added `DockPlus.entitlements` (calendars, location, apple-events) via `CODE_SIGN_ENTITLEMENTS`; verified in the signed bundle.
+- **Left/right dock stayed horizontal [FIXED]:** `DockView` switches to a vertical stack (`AnyLayout`) on side edges, measures/caps height instead of width, scrolls vertically on overflow, minimize chevron points down.
+- **Quick Actions overflow [FIXED]:** buttons now lay out in a 2-row grid and the tile widens one column per two actions, so all are clickable.
+- **1Password results:** each row now has buttons to copy username, password, verification code (`op item get --otp`), and open the website (primary URL, scheme added for bare hosts). Clicking the row still copies the password. Missing fields show a "No … saved" toast.
+- **Settings footer:** "brito.ai" is now a link to https://brito.ai.
+- Build note: building into `dist/DerivedData` fails codesign ("resource fork … detritus") because the project folder carries `com.apple.provenance`; built into a scratch DerivedData instead.
+- Verified: xcodegen OK, SwiftLint 0, Release BUILD SUCCEEDED, installed to /Applications, screenshot of left-edge vertical dock with 2-row quick actions.
