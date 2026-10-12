@@ -62,7 +62,8 @@ struct CalendarWidget: DockWidgetView {
     }
 }
 
-// Drives more attention as the event approaches: calm → teal → amber → pulsing red, then "Now".
+// Accent color for upcoming and in-progress events; amber under 30 min and pulsing red under 10 stay
+// fixed as warnings whatever accent the user picks.
 @MainActor
 private struct Urgency {
     let tint: Color
@@ -74,7 +75,7 @@ private struct Urgency {
 
         if minutes <= 0 {
             let ended = (end ?? start) < now
-            tint = ended ? Theme.Color.textSecondary : Theme.Color.positive
+            tint = ended ? Theme.Color.textSecondary : Theme.Color.accent
             label = ended ? Self.relative(start) : "Now"
             pulses = false
             return
@@ -87,11 +88,8 @@ private struct Urgency {
         case ..<30:
             tint = Theme.Color.warning
             pulses = false
-        case ..<60:
-            tint = Theme.Color.accent
-            pulses = false
         default:
-            tint = Theme.Color.textSecondary
+            tint = Theme.Color.accent
             pulses = false
         }
         label = "in \(Self.countdown(minutes: minutes))"
