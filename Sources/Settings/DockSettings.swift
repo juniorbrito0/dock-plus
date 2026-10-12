@@ -25,6 +25,14 @@ final class DockSettings {
         }
     }
 
+    // Push other apps' windows out of the strip Dock+ sits in (needs Accessibility).
+    var keepWindowsClear: Bool {
+        didSet {
+            UserDefaults.standard.set(keepWindowsClear, forKey: keepClearKey)
+            WindowGuardService.shared.applyToAllWindows()
+        }
+    }
+
     static let defaultOrder: [WidgetKind] = [
         .clockWeather, .music, .calendar, .reminders, .email, .systemStats, .battery,
         .appLauncher, .folders, .bookmarks, .diaTabs, .emoji, .askClaude, .onePassword, .quickActions,
@@ -39,6 +47,7 @@ final class DockSettings {
     private let widgetsKey = "enabledWidgets"
     private let edgeKey = "dockEdge"
     private let seenKey = "seenWidgetKinds"
+    private let keepClearKey = "keepWindowsClear"
 
     private init() {
         let defaults = UserDefaults.standard
@@ -55,6 +64,7 @@ final class DockSettings {
             enabledWidgets = Self.curatedDefault
         }
         edge = DockEdge(rawValue: defaults.string(forKey: edgeKey) ?? "") ?? .bottom
+        keepWindowsClear = defaults.object(forKey: keepClearKey) as? Bool ?? true
         defaults.set(WidgetKind.allCases.map(\.rawValue), forKey: seenKey)
         // didSet doesn't fire for assignments in init, so persist the merged list now — otherwise a
         // newly added widget kind shows once then vanishes on the next launch (seen but not saved).

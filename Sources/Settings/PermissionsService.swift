@@ -62,7 +62,10 @@ final class PermissionsService: NSObject, CLLocationManagerDelegate {
         calendar = state(EventKitAccess.status(for: .event))
         reminders = state(EventKitAccess.status(for: .reminder))
         location = locationState(locationManager.authorizationStatus)
+        let wasTrusted = accessibility == .granted
         accessibility = AXIsProcessTrusted() ? .granted : .notDetermined
+        // Window keeping starts working the moment Accessibility is granted, no relaunch needed.
+        if accessibility == .granted && !wasTrusted { WindowGuardService.shared.applyToAllWindows() }
     }
 
     // Accessibility and Automation grants happen in System Settings with no callback, so poll

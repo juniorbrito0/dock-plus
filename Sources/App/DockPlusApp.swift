@@ -55,5 +55,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         dock = DockWindowController()
         dock?.show()
+        WindowGuardService.shared.start()
     }
 }

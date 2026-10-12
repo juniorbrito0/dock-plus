@@ -104,6 +104,10 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.segmented)
                     .labelsHidden()
+                    Toggle("Keep windows from covering Dock+", isOn: $settings.keepWindowsClear)
+                    Text("Windows open, move and resize as usual, but stop at the edge of Dock+. Uses Accessibility.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 section("Startup") {

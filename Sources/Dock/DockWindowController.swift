@@ -81,5 +81,13 @@ final class DockWindowController: NSObject, NSWindowDelegate {
         }
 
         panel.setFrameOrigin(origin)
+
+        // Reserve the dock's resting spot (ignoring the temporary lift while the system Dock
+        // reveals), the full screen width like the system Dock, so windows stop above it.
+        var resting = NSRect(origin: origin, size: size)
+        resting.origin.y -= dockInset
+        let strip = NSRect(x: visible.minX, y: resting.minY, width: visible.width, height: resting.height)
+        WindowGuardService.shared.updateReservedArea(DockChrome.shared.minimized ? nil : strip,
+                                                     edge: DockSettings.shared.edge)
     }
 }
