@@ -5,7 +5,7 @@ extension Notification.Name {
 }
 
 enum DockEdge: String, CaseIterable, Codable, Identifiable {
-    case bottom, top, left, right
+    case bottom, top
     var id: String { rawValue }
     var label: String { rawValue.capitalized }
 }
@@ -27,7 +27,8 @@ final class DockSettings {
 
     static let defaultOrder: [WidgetKind] = [
         .clockWeather, .music, .calendar, .reminders, .email, .systemStats, .battery,
-        .appLauncher, .folders, .bookmarks, .diaTabs, .emoji, .askClaude, .onePassword, .quickActions
+        .appLauncher, .folders, .bookmarks, .diaTabs, .emoji, .askClaude, .onePassword, .quickActions,
+        .chromeSearch
     ]
 
     static let curatedDefault: [WidgetKind] = [

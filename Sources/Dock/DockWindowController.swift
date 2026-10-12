@@ -78,10 +78,6 @@ final class DockWindowController: NSObject, NSWindowDelegate {
             origin = NSPoint(x: visible.midX - size.width / 2, y: visible.minY + margin + dockInset)
         case .top:
             origin = NSPoint(x: visible.midX - size.width / 2, y: visible.maxY - size.height - margin)
-        case .left:
-            origin = NSPoint(x: visible.minX + margin, y: visible.midY - size.height / 2)
-        case .right:
-            origin = NSPoint(x: visible.maxX - size.width - margin, y: visible.midY - size.height / 2)
         }
 
         panel.setFrameOrigin(origin)

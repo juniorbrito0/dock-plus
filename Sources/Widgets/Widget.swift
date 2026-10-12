@@ -18,6 +18,7 @@ enum WidgetKind: String, CaseIterable, Codable, Identifiable {
     case onePassword
     case quickActions
     case diaTabs
+    case chromeSearch
 
     var id: String { rawValue }
 
@@ -38,6 +39,7 @@ enum WidgetKind: String, CaseIterable, Codable, Identifiable {
         case .onePassword: "1Password"
         case .quickActions: "Quick Actions"
         case .diaTabs: "Dia Tabs"
+        case .chromeSearch: "Chrome Search"
         }
     }
 
@@ -58,6 +60,7 @@ enum WidgetKind: String, CaseIterable, Codable, Identifiable {
         case .onePassword: "key"
         case .quickActions: "bolt"
         case .diaTabs: "safari"
+        case .chromeSearch: "magnifyingglass"
         }
     }
 
@@ -66,7 +69,7 @@ enum WidgetKind: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .clockWeather: 1.65
         case .music: 2.6
-        case .email, .askClaude: 2.8
+        case .email, .askClaude, .chromeSearch: 2.8
         case .emoji: 1.9
         case .calendar, .appLauncher: 1.7
         case .systemStats: 1.4

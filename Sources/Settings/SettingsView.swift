@@ -141,9 +141,7 @@ struct SettingsView: View {
             } header: {
                 Text("Enabled")
             } footer: {
-                ReorderHint(text: settings.edge == .left || settings.edge == .right
-                            ? "Drag ≡ or use the arrows to reorder. Top of the list is the top of the dock."
-                            : "Drag ≡ or use the arrows to reorder. Top of the list is the left end of the dock.")
+                ReorderHint(text: "Drag ≡ or use the arrows to reorder. Top of the list is the left end of the dock.")
             }
             if !disabledWidgets.isEmpty {
                 Section("Available") {
