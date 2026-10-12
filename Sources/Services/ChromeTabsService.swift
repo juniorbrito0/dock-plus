@@ -36,13 +36,14 @@ final class ChromeTabsService {
     }
 
     func focus(_ tab: ChromeTab) {
+        // Chrome reports tab ids as text, so compare as text: a number never equals "123".
         let script = """
         tell application "Google Chrome"
             repeat with w in windows
                 set i to 0
                 repeat with t in tabs of w
                     set i to i + 1
-                    if (id of t) is \(tab.id) then
+                    if ((id of t) as text) is "\(tab.id)" then
                         set active tab index of w to i
                         set index of w to 1
                         activate
