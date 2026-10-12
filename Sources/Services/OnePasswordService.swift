@@ -52,6 +52,14 @@ final class OnePasswordService {
 
     private init() {}
 
+    // Diagnostics: launch with `-opSelfTest` to log whether `op` can reach the 1Password app from
+    // inside Dock+ (the parent process changes how 1Password treats the request).
+    func selfTest() async {
+        let result = await Self.run(["vault", "list", "--format=json"])
+        let detail = result.ok ? "ok (\(result.out.count) bytes)" : result.err.prefix(200).description
+        DiagLog.log("op selfTest ok=\(result.ok) \(detail)")
+    }
+
     func loadItems() async {
         let result = await Self.run(["item", "list", "--categories", "Login", "--format=json", "--cache"])
         guard result.ok else {
@@ -163,34 +171,17 @@ final class OnePasswordService {
     }()
 
     // stdout and stderr are kept separate: `op` writes the password (and JSON) to stdout, and
-    // notices/errors to stderr — merging them would corrupt a copied secret.
+    // notices/errors to stderr — merging them would corrupt a copied secret. Spawned "disclaimed"
+    // so 1Password sees `op` itself, not Dock+, as the requester (see DisclaimedSpawn).
     private nonisolated static func run(_ args: [String]) async -> OPResult {
         guard let opPath else { return OPResult(out: "", err: "not found", ok: false) }
         return await withCheckedContinuation { continuation in
             DispatchQueue.global(qos: .userInitiated).async {
-                let process = Process()
-                process.executableURL = URL(fileURLWithPath: opPath)
-                process.arguments = args
-                let outPipe = Pipe()
-                let errPipe = Pipe()
-                process.standardOutput = outPipe
-                process.standardError = errPipe
-
-                let watchdog = DispatchWorkItem { if process.isRunning { process.terminate() } }
-                DispatchQueue.global().asyncAfter(deadline: .now() + 60, execute: watchdog)
-                do {
-                    try process.run()
-                    let outData = outPipe.fileHandleForReading.readDataToEndOfFile()
-                    let errData = errPipe.fileHandleForReading.readDataToEndOfFile()
-                    process.waitUntilExit()
-                    watchdog.cancel()
-                    let out = String(data: outData, encoding: .utf8) ?? ""
-                    let err = String(data: errData, encoding: .utf8) ?? ""
-                    continuation.resume(returning: OPResult(out: out, err: err, ok: process.terminationStatus == 0))
-                } catch {
-                    watchdog.cancel()
+                guard let result = DisclaimedSpawn.run(opPath, args) else {
                     continuation.resume(returning: OPResult(out: "", err: "not found", ok: false))
+                    return
                 }
+                continuation.resume(returning: OPResult(out: result.out, err: result.err, ok: result.status == 0))
             }
         }
     }

@@ -56,5 +56,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         dock = DockWindowController()
         dock?.show()
         WindowGuardService.shared.start()
+        if UserDefaults.standard.bool(forKey: "opSelfTest") {
+            Task { await OnePasswordService.shared.selfTest() }
+        }
     }
 }

@@ -82,7 +82,7 @@ private struct MessageRow: View {
 
     var body: some View {
         HStack(spacing: Theme.Spacing.sm) {
-            Button { email.activateMail() } label: {
+            Button { Task { await email.open(message) } } label: {
                 VStack(alignment: .leading, spacing: 1) {
                     Text(message.sender)
                         .font(.system(size: 12, weight: .bold))

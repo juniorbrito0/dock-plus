@@ -60,6 +60,27 @@ final class EmailService {
             }
     }
 
+    // Opens this exact email in Mail. message:// links (built from the email's Message-ID header)
+    // are Mail's own deep links; just activating Mail left whatever was selected before on screen.
+    func open(_ item: EmailItem) async {
+        guard isMailRunning else { activateMail(); return }
+        let script = """
+        tell application "Mail"
+            try
+                return message id of (first message of inbox whose id is \(item.id))
+            end try
+        end tell
+        """
+        let messageID = await AppleScriptRunner.run(script).trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !messageID.isEmpty,
+              let encoded = "<\(messageID)>".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed),
+              let url = URL(string: "message://\(encoded)") else {
+            activateMail()
+            return
+        }
+        NSWorkspace.shared.open(url)
+    }
+
     func archive(_ item: EmailItem) async {
         guard isMailRunning else { return }
         messages.removeAll { $0.id == item.id }
