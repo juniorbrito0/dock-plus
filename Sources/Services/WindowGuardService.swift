@@ -122,10 +122,12 @@ final class WindowGuardService {
         let stripBottom = height - reserved.minY
         let usableTop = height - screen.visibleFrame.maxY
         let usableBottom = height - screen.visibleFrame.minY
-        let screenLeft = screen.frame.minX
-        let screenRight = screen.frame.maxX
-        // Only windows on the same display as Dock+.
-        guard frame.maxX > screenLeft, frame.minX < screenRight else { return }
+        // Only windows on the same display as Dock+. Checking the window's centre in both directions
+        // matters: a display stacked below this one shares its horizontal span, so a sideways-only
+        // test would treat windows there as "under the dock" and push them back onto this display.
+        let screenRect = CGRect(x: screen.frame.minX, y: height - screen.frame.maxY,
+                                width: screen.frame.width, height: screen.frame.height)
+        guard screenRect.contains(CGPoint(x: frame.midX, y: frame.midY)) else { return }
 
         let original = frame
         switch edge {
